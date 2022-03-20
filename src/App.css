@@ -13,6 +13,8 @@
   }
 }
 
+@import '~leaflet/dist/leaflet.css';
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -35,4 +37,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}
+
+.leaflet-control-container {
+  width: 100%;
+  height: 50vh;
 }

@@ -1,3 +1,14 @@
+# Prerequisites
+```console
+andrii@andrii-Aspire-E5-575G:~/autocommunity-frontend$ node -v
+v14.19.1
+```
+
+# Start
+`npm start` to see fine OpenStreetMaps with your location in browser [http://localhost:3000](http://localhost:3000).
+
+
+<!--
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -44,3 +55,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+-->
