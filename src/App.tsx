@@ -13,6 +13,7 @@ const visitorIcon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
 });
 
+
 function LocationMarkers() {
   const initialMarkers: any[] = [];
   const [markers, setMarkers] = useState(initialMarkers);
@@ -23,17 +24,20 @@ function LocationMarkers() {
       setMarkers([...markers])
       map.flyTo(e.latlng, map.getZoom());
     },
+    dragend: () => setMarkers([...markers]),
+    zoomend: () => setMarkers([...markers]),
   });
   return (
     <React.Fragment>
-      {markers.map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> </Marker> )}
+      {markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>You are here</Popup> </Marker> )}
     </React.Fragment>
   );
 }
 
 function App() {
   return (
-    <MapContainer 
+    <MapContainer
+      preferCanvas={true}
       center={[50.166258, 19.9415741]} 
       zoom={12}
     >
