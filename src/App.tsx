@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L, { Icon } from "leaflet";
 //import logo from './logo.svg';
@@ -17,6 +17,7 @@ const visitorIcon = L.icon({
 function LocationMarkers() {
   const initialMarkers: any[] = [];
   const [markers, setMarkers] = useState(initialMarkers);
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   const map = useMapEvents({
     click: (e) => setMarkers([...markers, e.latlng]),
@@ -24,8 +25,8 @@ function LocationMarkers() {
       setMarkers([...markers])
       map.flyTo(e.latlng, map.getZoom());
     },
-    dragend: () => setMarkers([...markers]),
-    zoomend: () => setMarkers([...markers]),
+    dragend: () => forceUpdate(),
+    zoomend: () => forceUpdate(),
   });
   return (
     <React.Fragment>
