@@ -17,7 +17,7 @@ const visitorIcon = L.icon({
 function LocationMarkers() {
   const initialMarkers: any[] = [];
   const [markers, setMarkers] = useState(initialMarkers);
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [_, forceUpdate] = useReducer(x => x + 1, 0);
 
   const map = useMapEvents({
     click: (e) => setMarkers([...markers, e.latlng]),
@@ -35,20 +35,44 @@ function LocationMarkers() {
   );
 }
 
+function List(style: any) {
+  return <div style={style}> Hello, world! </div>;
+}
+
 function App() {
   return (
-    <MapContainer
-      preferCanvas={true}
-      center={[50.166258, 19.9415741]} 
-      zoom={12}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <LocationMarkers />
+    <div style={{
+      position: "relative",
+      boxSizing: "border-box",
+    }}>
+      <List style={{
+        width: "30%",
+        background: "blue",
+        height: "100vh",
+      }}/>
 
-    </MapContainer>
+      <MapContainer
+        preferCanvas={true}
+        center={[50.166258, 19.9415741]} 
+        zoom={12}
+        style={{
+          height: "100vh",
+          width: "70%",
+          position: "absolute",
+          right: "0",
+          bottom: "0",
+          top: "0",
+          background: "red",
+        }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <LocationMarkers />
+
+      </MapContainer>
+    </div>
   );
 }
 
