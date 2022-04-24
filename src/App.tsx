@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import L, { Icon } from "leaflet";
+import L, { Icon, marker } from "leaflet";
 //import logo from './logo.svg';
 import './App.css';
 
@@ -14,32 +14,38 @@ const visitorIcon = L.icon({
 });
 
 
-function LocationMarkers() {
-  const initialMarkers: any[] = [];
-  const [markers, setMarkers] = useState(initialMarkers);
-  const [_, forceUpdate] = useReducer(x => x + 1, 0);
+function LocationMarkers(props: {markers: any[], setMarkers: any, forceUpdate: any}) {
 
   const map = useMapEvents({
-    click: (e) => setMarkers([...markers, e.latlng]),
+    click: (e) => props.setMarkers([...props.markers, e.latlng]),
     locationfound: (e) => {
-      setMarkers([...markers])
+      props.setMarkers([...props.markers])
       map.flyTo(e.latlng, map.getZoom());
     },
-    dragend: () => forceUpdate(),
-    zoomend: () => forceUpdate(),
+    dragend: () => props.forceUpdate(),
+    zoomend: () => props.forceUpdate(),
   });
   return (
     <React.Fragment>
-      {markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>You are here</Popup> </Marker> )}
+      {props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>You are here</Popup> </Marker> )}
     </React.Fragment>
   );
 }
 
-function List(style: any) {
-  return <div style={style}> Hello, world! </div>;
+function List(props: {style: any, markers: any[]}) {
+  return (
+      <div style={props.style}> 
+        <ul>
+          {props.markers.map((marker, idx) => <li> {idx} {marker.lat} {marker.lng} </li>)}
+        </ul>
+      </div>
+     );
 }
 
-function App() {
+function Screen() {
+  const initialMarkers: any[] = [];
+  const [markers, setMarkers] = useState(initialMarkers);
+  const [_, forceUpdate] = useReducer(x => x + 1, 0);
   return (
     <div style={{
       position: "relative",
@@ -48,8 +54,7 @@ function App() {
       <List style={{
         width: "30%",
         background: "blue",
-        height: "100vh",
-      }}/>
+        height: "100vh",}} markers = {markers}/>
 
       <MapContainer
         preferCanvas={true}
@@ -69,9 +74,21 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <LocationMarkers />
+        <LocationMarkers markers={markers} setMarkers = {setMarkers} forceUpdate = {forceUpdate} />
 
       </MapContainer>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div style={{
+      position: "relative",
+      boxSizing: "border-box",
+    }}>
+
+      <Screen />
     </div>
   );
 }
