@@ -25,3 +25,7 @@ yarn-error.log*
 
 # Idea
 .Idea
+
+
+# ENV
+.env

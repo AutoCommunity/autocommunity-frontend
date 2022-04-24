@@ -5,6 +5,8 @@ v14.19.1
 ```
 
 # Start
+add environment variable `REACT_APP_API_URL` to your environment or .env file 
+
 `npm start` to see fine OpenStreetMaps with your location in browser [http://localhost:3000](http://localhost:3000).
 
 
