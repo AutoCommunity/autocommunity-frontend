@@ -11,17 +11,20 @@ const visitorIcon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
 });
 
-function LocationMarkers(props: {markers: any[]}) {
+function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
     locationfound: (e) => {
-      map.flyTo(e.latlng, map.getZoom());
+      if (props.markers.length > 0)map.flyTo(props.markers[0], map.getZoom());
+        else map.flyTo(e.latlng, map.getZoom());
+    },
+    click: (e) => {
+      props.saveMarkers(e.latlng);
     },
     dragend: () => forceUpdate(),
     zoomend: () => forceUpdate(),
   });
-  if (props.markers.length > 0)map.flyTo(props.markers[0], map.getZoom());
-  
+
   return (
     <React.Fragment>
       {props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>You are here</Popup> </Marker> )}
@@ -29,7 +32,7 @@ function LocationMarkers(props: {markers: any[]}) {
   );
 }
 
-function CustomMap(props: {markers: any[]}){
+function CustomMap(props: {markers: any[], saveMarkers: any}){
   return (
     <MapContainer
         preferCanvas={true}
@@ -48,7 +51,7 @@ function CustomMap(props: {markers: any[]}){
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <LocationMarkers markers={props.markers}/>
+        <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers}/>
 
     </MapContainer>
   );
