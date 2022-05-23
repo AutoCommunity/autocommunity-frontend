@@ -27,7 +27,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
 
   return (
     <React.Fragment>
-      {props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>You are here</Popup> </Marker> )}
+      {props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>{position.name}</Popup> </Marker> )}
     </React.Fragment>
   );
 }
