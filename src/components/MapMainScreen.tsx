@@ -48,13 +48,13 @@ class MapMainScreen extends React.Component {
       })
       .then(response => {
         console.log(response)
-        if (response.data.status === "FAILURE") {
+      })
+      .catch((error) => {
+        console.log(error.response.data)
+        if (error.response.status === 400) {
           window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
           return;
         }
-      })
-      .catch((error) => {
-        console.log(error)
       });
 
     this.setState({isLoading: true, isSavingMarkers: false});

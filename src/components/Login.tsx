@@ -13,10 +13,12 @@ async function onSubmit(event: any){
     )
     .then(response => {
       if (response.data.status === 'SUCCESS') window.open(process.env.REACT_APP_FRONT_URL, '_self')
-      else window.location.reload()
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error.response.data)
+      if (error.response.status === 400) {
+        window.location.reload()
+      }
     });
         
 }
