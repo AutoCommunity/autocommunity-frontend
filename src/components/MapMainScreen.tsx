@@ -2,7 +2,7 @@ import React from "react";
 import CustomMap from "./CustomMap";
 import MarkerList from "./MarkerList";
 import axios from "axios";
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 import 'leaflet/dist/leaflet.css'
 
@@ -54,7 +54,7 @@ class MapMainScreen extends React.Component {
       .catch((error) => {
         console.log(error.response.data)
         if (error.response.status === 400) {
-          window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
+          //window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
           return;
         }
       });
@@ -83,15 +83,24 @@ class MapMainScreen extends React.Component {
         <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
         <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Add place</Modal.Title>  
           </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Body>
+            Woohoo, you're about to add new place! Please enter name:
+            <Form onSubmit={this.sendMarker}>
+              <Form.Group >
+                <input className="form-control" id="name" />         
+              </Form.Group>
+              <Form.Group >
+                <Button variant="primary" className="form-control btn btn-primary" type="submit">
+                  Add Place
+                </Button>
+              </Form.Group>
+            </Form> 
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
