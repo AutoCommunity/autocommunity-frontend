@@ -1,7 +1,6 @@
 import React, { useReducer } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from "leaflet";
-import MarkerList from './MarkerList';
 
 const visitorIcon = L.icon({
   iconSize: [25, 41],
@@ -15,8 +14,8 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
     locationfound: (e) => {
-      if (props.markers.length > 0)map.flyTo(props.markers[0], map.getZoom());
-        else map.flyTo(e.latlng, map.getZoom());
+      if (props.markers.length > 0) map.flyTo(props.markers[0], map.getZoom());
+      else map.flyTo(e.latlng, map.getZoom());
     },
     click: (e) => {
       props.saveMarkers(e.latlng);
@@ -45,7 +44,6 @@ function CustomMap(props: {markers: any[], saveMarkers: any}){
           right: "0",
           bottom: "0",
           top: "0",
-          background: "red",
         }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
