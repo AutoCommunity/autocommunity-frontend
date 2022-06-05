@@ -11,6 +11,7 @@ const visitorIcon = L.icon({
 });
 
 function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
     locationfound: (e) => {
