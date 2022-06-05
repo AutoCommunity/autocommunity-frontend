@@ -76,7 +76,8 @@ class MapMainScreen extends React.Component {
       }}>
         {this.state.isSavingMarker && <Form onSubmit={this.sendMarker}/>}
         <MarkerList style={{
-        width: "30%",
+        minWidth: "30%",
+        maxWidth: "30%",
         height: "100vh",}} markers = {this.state.markers}/>
         <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
       </div>
