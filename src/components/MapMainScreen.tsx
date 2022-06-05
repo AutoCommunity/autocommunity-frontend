@@ -1,8 +1,8 @@
 import React from "react";
 import CustomMap from "./CustomMap";
-import Form from "./Form";
 import MarkerList from "./MarkerList";
 import axios from "axios";
+import { Modal, Button } from 'react-bootstrap';
 
 import 'leaflet/dist/leaflet.css'
 
@@ -16,7 +16,6 @@ class MapMainScreen extends React.Component {
     super(props)
     this.saveMarkers = this.saveMarkers.bind(this);
     this.sendMarker = this.sendMarker.bind(this);
-    
   }
 
   state = {
@@ -25,6 +24,9 @@ class MapMainScreen extends React.Component {
     isSavingMarker: false,
     markerCoords: {lat: 0, lng: 0},
   }
+
+  handleClose = async() => this.setState({ isSavingMarker: false });
+  handleShow = async () => this.setState({ isSavingMarker: false });
 
   async componentDidMount() {
     this.setState({isLoading: true});
@@ -57,7 +59,7 @@ class MapMainScreen extends React.Component {
         }
       });
 
-    this.setState({isLoading: true, isSavingMarkers: false});
+    this.setState({isLoading: true, isSavingMarker: false});
     const data = await axios
       .get(process.env.REACT_APP_API_URL + '/api/markers/get')
       .then(response => response.data);
@@ -74,12 +76,25 @@ class MapMainScreen extends React.Component {
         position: "relative",
         boxSizing: "border-box",
       }}>
-        {this.state.isSavingMarker && <Form onSubmit={this.sendMarker}/>}
         <MarkerList style={{
         minWidth: "30%",
         maxWidth: "30%",
         height: "100vh",}} markers = {this.state.markers}/>
         <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
+        <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={this.handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }
