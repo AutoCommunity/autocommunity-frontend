@@ -53,8 +53,8 @@ class MapMainScreen extends React.Component {
       })
       .catch((error) => {
         console.log(error.response.data)
-        if (error.response.status === 400) {
-          //window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
+        if (error.response.status === 401) {
+          window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
           return;
         }
       });
