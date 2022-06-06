@@ -25,9 +25,27 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
     zoomend: () => forceUpdate(),
   });
 
+  const handleClick = (e: any) => {
+    e.target._popup._closeButton.onclick = (event: any) => event.preventDefault();
+    e.target._popup._closeButton.href = "";
+    e.target.openPopup();
+  };
+
   return (
     <React.Fragment>
-      {props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => <Marker position={position} icon={visitorIcon} key={`marker-${idx}`}> <Popup>{position.name}</Popup> </Marker> )}
+      {
+        props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => 
+          <Marker position={position} 
+            icon={visitorIcon} 
+            key={`marker-${idx}`}
+            eventHandlers={{
+              click: (e) => handleClick(e),
+            }}
+          > 
+            <Popup>{position.name}</Popup> 
+          </Marker> 
+        )
+      }
     </React.Fragment>
   );
 }
@@ -45,7 +63,8 @@ function CustomMap(props: {markers: any[], saveMarkers: any}){
           right: "0",
           bottom: "0",
           top: "0",
-        }}>
+        }}
+        >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
