@@ -109,6 +109,7 @@ class MapMainScreen extends React.Component {
           <MarkerList markers = {this.state.markers}/>
         </div>
         <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
+        { this.state.username !== '' ?
         <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Add place</Modal.Title>  
@@ -126,12 +127,13 @@ class MapMainScreen extends React.Component {
               </Form.Group>
             </Form> 
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
         </Modal>
+        : <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Please login.</Modal.Title>  
+            </Modal.Header>
+          </Modal>
+        }
       </div>
     )
   }
