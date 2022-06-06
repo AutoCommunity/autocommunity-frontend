@@ -3,6 +3,7 @@ import CustomMap from "./CustomMap";
 import MarkerList from "./MarkerList";
 import axios from "axios";
 import { Modal, Button, Form } from 'react-bootstrap';
+import { Login } from './Login';
 
 import 'leaflet/dist/leaflet.css'
 
@@ -16,6 +17,7 @@ class MapMainScreen extends React.Component {
     super(props)
     this.saveMarkers = this.saveMarkers.bind(this);
     this.sendMarker = this.sendMarker.bind(this);
+    this.saveUsername = this.saveUsername.bind(this);
   }
 
   state = {
@@ -23,6 +25,7 @@ class MapMainScreen extends React.Component {
     markers: [],
     isSavingMarker: false,
     markerCoords: {lat: 0, lng: 0},
+    username: '',
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
@@ -33,7 +36,27 @@ class MapMainScreen extends React.Component {
     const data = await axios
       .get(process.env.REACT_APP_API_URL + '/api/markers/get')
       .then(response => response.data);
-    this.setState({markers: data, isLoading: false});
+    const userData = await this.getUserConfig();
+    this.setState({markers: data, isLoading: false, username: userData.username});
+  }
+
+  async getUserConfig() {
+    return await axios
+      .get(process.env.REACT_APP_API_URL + '/api/user/config', {
+        withCredentials: true,
+      })
+      .then(response => {
+        return response.data;
+      })
+      .catch(_error => {
+        return {
+          username: ''
+        };
+      });
+  }
+
+  async saveUsername(newUsername: string) {
+    this.setState({ username: newUsername });
   }
 
   async sendMarker(event: any){
@@ -76,10 +99,15 @@ class MapMainScreen extends React.Component {
         position: "relative",
         boxSizing: "border-box",
       }}>
-        <MarkerList style={{
-        minWidth: "30%",
-        maxWidth: "30%",
-        height: "100vh",}} markers = {this.state.markers}/>
+        <div style={{
+          minWidth: "30%",
+          maxWidth: "30%",
+          height: "100vh",
+        }}
+        >
+          <Login username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig} />
+          <MarkerList markers = {this.state.markers}/>
+        </div>
         <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
         <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
           <Modal.Header closeButton>

@@ -1,6 +1,6 @@
-function MarkerList(props: {style: any, markers: any[]}) {
+function MarkerList(props: {markers: any[]}) {
   return (
-      <div style={props.style}> 
+      <div> 
         <ul>
           {props.markers.map((marker, idx) => <li key = {idx}> {idx} {marker.name} {marker.lat} {marker.lng} </li>)}
         </ul>
