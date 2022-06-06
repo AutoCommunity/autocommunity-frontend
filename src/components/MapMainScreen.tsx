@@ -6,13 +6,17 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Login } from './Login';
 
 import 'leaflet/dist/leaflet.css'
+import { Layout, Menu } from "antd";
+import { Content, Footer, Header } from "antd/lib/layout/layout";
+import '../index.css'
+import 'antd/dist/antd.css'
+import Sider from "antd/lib/layout/Sider";
 
 
 
 
 
 class MapMainScreen extends React.Component {
-  //navigate = useNavigate();
   constructor(props: any) {
     super(props)
     this.saveMarkers = this.saveMarkers.bind(this);
@@ -95,6 +99,118 @@ class MapMainScreen extends React.Component {
 
   render() {
     return (
+      <Layout className="layout">
+        <Sider
+          style={{
+            overflow: 'auto',
+            height: '100%',
+            width: '30vw',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
+          width={'300px'}
+        >
+          <Layout style={{ minHeight: "100vh" }}>
+            <Header>
+              <div className="logo"> Autocommunity </div>
+            </Header>
+            <Content
+              style={{
+                padding: 0,
+                height: "90%",
+                background: "rgb(5, 21, 38)"
+              }}
+            >
+              <Menu
+                theme="dark" mode="inline" defaultSelectedKeys={['auth']}
+              >
+                {
+                  this.state.username === '' ?
+                  <Menu.Item
+                    key="auth"
+                  >
+                    Login or Sign up {this.state.username}
+                  </Menu.Item>
+                  :
+                  <Menu.Item
+                    key="logout"
+                  >
+                    Logout
+                  </Menu.Item>
+                }
+              </Menu>
+
+            </Content>
+            <Footer
+              style={{
+                textAlign: 'center',
+                height: '5%',
+                position: "sticky",
+                top: 0,
+                bottom: 0,
+                color: 'gray'
+              }}
+            >
+              Autocommunity, 2022
+            </Footer>
+          </Layout>
+        </Sider>
+        <Layout
+          style={{
+            padding: 0,
+          }}
+        >
+          <Content
+            style={{
+              padding: 0,
+              height: "100vh",
+              width: "calc(100% - 300px)",
+              background: 'black',
+            }}
+          >
+            <CustomMap
+              style={{
+                height: "inherit",
+                width: "inherit",
+                position: "absolute",
+                right: "0",
+                bottom: "0",
+                top: "0",
+              }}
+              markers={this.state.markers}
+              saveMarkers = {this.saveMarkers}
+            />
+          </Content>
+        </Layout>
+        { this.state.username !== '' ?
+        <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add place</Modal.Title>  
+          </Modal.Header>
+          <Modal.Body>
+            Woohoo, you're about to add new place! Please enter name:
+            <Form onSubmit={this.sendMarker}>
+              <Form.Group >
+                <input className="form-control" id="name" />         
+              </Form.Group>
+              <Form.Group >
+                <Button variant="primary" className="form-control btn btn-primary" type="submit">
+                  Add Place
+                </Button>
+              </Form.Group>
+            </Form> 
+          </Modal.Body>
+        </Modal>
+        : <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Please login.</Modal.Title>  
+            </Modal.Header>
+          </Modal>
+        }
+      </Layout>
+      /*
       <div style={{
         position: "relative",
         boxSizing: "border-box",
@@ -135,6 +251,7 @@ class MapMainScreen extends React.Component {
           </Modal>
         }
       </div>
+      */
     )
   }
 }

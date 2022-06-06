@@ -50,20 +50,13 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
   );
 }
 
-function CustomMap(props: {markers: any[], saveMarkers: any}){
+function CustomMap(props: {style: any, markers: any[], saveMarkers: any}){
   return (
     <MapContainer
         preferCanvas={true}
         center={[50.166258, 19.9415741]} 
         zoom={12}
-        style={{
-          height: "100vh",
-          width: "70%",
-          position: "absolute",
-          right: "0",
-          bottom: "0",
-          top: "0",
-        }}
+        style={props.style}
         >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
