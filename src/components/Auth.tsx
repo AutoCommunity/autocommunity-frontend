@@ -11,7 +11,6 @@ interface AuthProps {
 
 const Auth: React.FC<AuthProps> = (props: AuthProps) => {
   const handleLoginClick = async (event: any) => {
-    console.log(event);
     await axios
       .post(process.env.REACT_APP_API_URL + '/api/user/auth', {
           username: event.username,
