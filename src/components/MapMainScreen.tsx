@@ -1,9 +1,8 @@
 import React from "react";
 import CustomMap from "./CustomMap";
-import MarkerList from "./MarkerList";
 import axios from "axios";
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Login } from './Login';
+import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
 import { Layout, Menu } from "antd";
@@ -126,20 +125,11 @@ class MapMainScreen extends React.Component {
               <Menu
                 theme="dark" mode="inline" defaultSelectedKeys={['auth']}
               >
-                {
-                  this.state.username === '' ?
-                  <Menu.Item
-                    key="auth"
-                  >
-                    Login or Sign up {this.state.username}
-                  </Menu.Item>
-                  :
-                  <Menu.Item
-                    key="logout"
-                  >
-                    Logout
-                  </Menu.Item>
-                }
+                <Menu.Item
+                  key="auth"
+                >
+                  <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                </Menu.Item>
               </Menu>
 
             </Content>
