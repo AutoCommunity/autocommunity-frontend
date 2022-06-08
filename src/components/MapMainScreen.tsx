@@ -1,12 +1,10 @@
 import React from "react";
 import CustomMap from "./CustomMap";
-import MarkerList from "./MarkerList";
 import axios from "axios";
-import { Modal, Button, Form } from 'react-bootstrap';
-import { Login } from './Login';
+import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import 'antd/dist/antd.css'
@@ -64,9 +62,8 @@ class MapMainScreen extends React.Component {
   }
 
   async sendMarker(event: any){
-    event.preventDefault();
     const requestBody = {
-      name: event.target.name.value,
+      name: event.name,
       markerType: 0,
       lat: this.state.markerCoords.lat,
       lng: this.state.markerCoords.lng
@@ -94,7 +91,11 @@ class MapMainScreen extends React.Component {
   }
 
   async saveMarkers(newMarkerCoords: any){
-    this.setState({isSavingMarker: true, markerCoords: newMarkerCoords});
+    if (this.state.username === '') {
+      message.warning("Please login to add places");
+    } else {
+      this.setState({isSavingMarker: true, markerCoords: newMarkerCoords});
+    }
   }
 
   render() {
@@ -126,20 +127,11 @@ class MapMainScreen extends React.Component {
               <Menu
                 theme="dark" mode="inline" defaultSelectedKeys={['auth']}
               >
-                {
-                  this.state.username === '' ?
-                  <Menu.Item
-                    key="auth"
-                  >
-                    Login or Sign up {this.state.username}
-                  </Menu.Item>
-                  :
-                  <Menu.Item
-                    key="logout"
-                  >
-                    Logout
-                  </Menu.Item>
-                }
+                <Menu.Item
+                  key="auth"
+                >
+                  <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                </Menu.Item>
               </Menu>
 
             </Content>
@@ -184,29 +176,34 @@ class MapMainScreen extends React.Component {
             />
           </Content>
         </Layout>
-        { this.state.username !== '' ?
-        <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add place</Modal.Title>  
-          </Modal.Header>
-          <Modal.Body>
-            Woohoo, you're about to add new place! Please enter name:
-            <Form onSubmit={this.sendMarker}>
-              <Form.Group >
-                <input className="form-control" id="name" />         
-              </Form.Group>
-              <Form.Group >
-                <Button variant="primary" className="form-control btn btn-primary" type="submit">
-                  Add Place
+
+        { this.state.isSavingMarker &&
+          <Modal title="Woohoo, you're about to add new place! Please enter name:" 
+                visible={this.state.isSavingMarker} 
+                footer={null}
+                onCancel={() => this.setState({isSavingMarker: false})}
+          >
+            <Form 
+              name = "Save marker"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={this.sendMarker}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[{ required: true, message: 'Please input name of your place!' }]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  Add place
                 </Button>
-              </Form.Group>
-            </Form> 
-          </Modal.Body>
-        </Modal>
-        : <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Please login.</Modal.Title>  
-            </Modal.Header>
+              </Form.Item>
+            </Form>
           </Modal>
         }
       </Layout>
