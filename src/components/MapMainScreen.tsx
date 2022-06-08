@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import { Layout, Menu, Modal, Form, message, Input, Button } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.min.css'
 import Sider from "antd/lib/layout/Sider";
 
 
