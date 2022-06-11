@@ -1,6 +1,6 @@
 # Prerequisites
 ```console
-andrii@andrii-Aspire-E5-575G:~/autocommunity-frontend$ node -v
+$ node -v
 v14.19.1
 ```
 
