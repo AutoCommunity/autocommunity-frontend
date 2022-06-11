@@ -50,11 +50,13 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
   );
 }
 
-function CustomMap(props: {style: any, markers: any[], saveMarkers: any}){
+function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2]}){
+  console.log("kek " + props.center);
   return (
     <MapContainer
+        key = {JSON.stringify([props.center, new Date().getDate()] )}
         preferCanvas={true}
-        center={[50.166258, 19.9415741]} 
+        center={props.center} 
         zoom={12}
         style={props.style}
         >
