@@ -71,7 +71,10 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
   if (props.username === '') {
     return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button 
+        type="primary"
+        onClick={showModal}
+      >
         Login or Signup
       </Button>
       <Modal title="Login or Sign up" footer = {null} visible={isLoginVisible} onCancel={onCancel}>

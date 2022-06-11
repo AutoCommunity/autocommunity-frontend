@@ -9,6 +9,7 @@ import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import 'antd/dist/antd.min.css'
 import Sider from "antd/lib/layout/Sider";
+import MarkerList from "./MarkerList";
 
 
 
@@ -20,6 +21,7 @@ class MapMainScreen extends React.Component {
     this.saveMarkers = this.saveMarkers.bind(this);
     this.sendMarker = this.sendMarker.bind(this);
     this.saveUsername = this.saveUsername.bind(this);
+    this.handleCenterClick = this.handleCenterClick.bind(this);
   }
 
   state = {
@@ -28,6 +30,7 @@ class MapMainScreen extends React.Component {
     isSavingMarker: false,
     markerCoords: {lat: 0, lng: 0},
     username: '',
+    center: [50.166258, 19.9415741]
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
@@ -97,6 +100,13 @@ class MapMainScreen extends React.Component {
       this.setState({isSavingMarker: true, markerCoords: newMarkerCoords});
     }
   }
+  
+  handleCenterClick(item: {lat: any, lng: any}){
+    this.setState({
+      center: [item.lat, item.lng]
+    });
+    console.log(this.state.center);
+  }
 
   render() {
     return (
@@ -125,6 +135,9 @@ class MapMainScreen extends React.Component {
               }}
             >
               <Menu
+                style = {{
+                  padding: "5px"
+                }}
                 theme="dark" mode="inline" defaultSelectedKeys={['auth']}
               >
                 <Menu.Item
@@ -133,6 +146,11 @@ class MapMainScreen extends React.Component {
                   <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
                 </Menu.Item>
               </Menu>
+
+              <MarkerList
+                markers={this.state.markers} 
+                handleCenterClick = {this.handleCenterClick}
+              />
 
             </Content>
             <Footer
@@ -173,6 +191,7 @@ class MapMainScreen extends React.Component {
               }}
               markers={this.state.markers}
               saveMarkers = {this.saveMarkers}
+              center={this.state.center}
             />
           </Content>
         </Layout>
