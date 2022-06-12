@@ -32,7 +32,9 @@ jobs:
           npm run build
           
       - name: Deploy
-        run: |
+          run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           npm i gh-pages -g
           gh-pages -d build -r https://$USERNAME:$REPO_KEY@github.com/AutoCommunity/autocommunity.github.io.git
         env:
