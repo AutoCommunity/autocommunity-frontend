@@ -33,6 +33,7 @@ jobs:
           
       - name: Deploy
         run: |
+          npm i gh-pages -g
           gh-pages -d build -r https://$USERNAME:$REPO_KEY@github.com/AutoCommunity/autocommunity.github.io.git
         env:
           REPO_KEY: ${{secrets.PUSH_TOKEN}}
