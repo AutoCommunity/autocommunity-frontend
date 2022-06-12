@@ -32,7 +32,8 @@ jobs:
           npm run build
           
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
-        with:
-          branch: gh-pages
-          folder: build
+        run: |
+          gh-pages -d build -r https://$USERNAME:$REPO_KEY@github.com/AutoCommunity/autocommunity.github.io.git
+        env:
+          REPO_KEY: ${{secrets.PUSH_TOKEN}}
+          USERNAME: github-actions[bot]
