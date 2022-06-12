@@ -51,7 +51,6 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
 }
 
 function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2]}){
-  console.log("kek " + props.center);
   return (
     <MapContainer
         key = {JSON.stringify([props.center, new Date().getDate()] )}
