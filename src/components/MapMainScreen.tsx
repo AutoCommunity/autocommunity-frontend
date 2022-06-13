@@ -10,6 +10,7 @@ import '../index.css'
 import 'antd/dist/antd.min.css'
 import Sider from "antd/lib/layout/Sider";
 import MarkerList from "./MarkerList";
+import MarkerInfoModal from "./MarkerInfoModal";
 
 
 
@@ -22,6 +23,7 @@ class MapMainScreen extends React.Component {
     this.sendMarker = this.sendMarker.bind(this);
     this.saveUsername = this.saveUsername.bind(this);
     this.handleCenterClick = this.handleCenterClick.bind(this);
+    this.selectMarker = this.selectMarker.bind(this);
   }
 
   state = {
@@ -31,11 +33,16 @@ class MapMainScreen extends React.Component {
     markerAddress: '',
     markerCoords: {lat: 0, lng: 0},
     username: '',
-    center: [50.166258, 19.9415741]
+    center: [50.166258, 19.9415741],
+    selectedMarker: {}
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
   handleShow = async () => this.setState({ isSavingMarker: false });
+
+  selectMarker(marker: any) {
+    this.setState({selectedMarker: marker});
+  }
 
   async componentDidMount() {
     this.setState({isLoading: true});
@@ -163,6 +170,7 @@ class MapMainScreen extends React.Component {
               <MarkerList
                 markers={this.state.markers} 
                 handleCenterClick = {this.handleCenterClick}
+                selectMarker = {this.selectMarker}
               />
 
             </Content>
@@ -205,6 +213,7 @@ class MapMainScreen extends React.Component {
               markers={this.state.markers}
               saveMarkers = {this.saveMarkers}
               center={this.state.center}
+              selectMarker = {this.selectMarker}
             />
           </Content>
         </Layout>
@@ -252,6 +261,8 @@ class MapMainScreen extends React.Component {
             </Form>
           </Modal>
         }
+
+        <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
       </Layout>
       /*
       <div style={{

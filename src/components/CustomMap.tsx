@@ -10,7 +10,7 @@ const visitorIcon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
 });
 
-function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
+function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any}) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
@@ -25,24 +25,25 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
     zoomend: () => forceUpdate(),
   });
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: any, marker: any) => {
     e.target._popup._closeButton.onclick = (event: any) => event.preventDefault();
     e.target._popup._closeButton.href = "";
     e.target.openPopup();
+    props.selectMarker(marker);
   };
 
   return (
     <React.Fragment>
       {
-        props.markers.filter((position) => map.getBounds().contains(position)).map((position, idx) => 
-          <Marker position={position} 
+        props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
+          <Marker position={marker} 
             icon={visitorIcon} 
             key={`marker-${idx}`}
             eventHandlers={{
-              click: (e) => handleClick(e),
+              click: (e) => handleClick(e, marker),
             }}
           > 
-            <Popup>{position.name}</Popup> 
+            <Popup>{marker.name}</Popup> 
           </Marker> 
         )
       }
@@ -50,7 +51,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any}) {
   );
 }
 
-function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2]}){
+function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2], selectMarker: any}){
   return (
     <MapContainer
         key = {JSON.stringify([props.center, new Date().getDate()] )}
@@ -63,7 +64,7 @@ function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center:
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers}/>
+        <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers} selectMarker = {props.selectMarker}/>
 
     </MapContainer>
   );

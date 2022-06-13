@@ -1,7 +1,7 @@
-import { Button, List } from "antd";
-import { AimOutlined } from "@ant-design/icons";
+import { Button, List, Space } from "antd";
+import { AimOutlined, BarsOutlined } from "@ant-design/icons";
 
-function MarkerList(props: {markers: any[], handleCenterClick: any}) {
+function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker: any}) {
   return (
     <List
       style={{
@@ -20,11 +20,18 @@ function MarkerList(props: {markers: any[], handleCenterClick: any}) {
           <List.Item.Meta
             title={<div>{item.name}</div>}
           />
-          <Button type="primary" icon={<AimOutlined />} shape="circle"
-            onClick = {
-              () => props.handleCenterClick(item)
-            }
-          />
+          <Space >
+            <Button type="primary" icon={<BarsOutlined />} shape="circle"
+              onClick = {
+                () => props.selectMarker(item)
+              }
+            />
+            <Button type="primary" icon={<AimOutlined />} shape="circle"
+              onClick = {
+                () => props.handleCenterClick(item)
+              }
+            />
+        </Space>
         </List.Item>
       )}
     />
