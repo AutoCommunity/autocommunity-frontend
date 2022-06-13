@@ -30,6 +30,8 @@ jobs:
         run: |
           npm i
           npm run build
+        env:
+          REACT_APP_API_URL: ${{secrets.API_URL}}
           
       - name: Deploy
         run: |
