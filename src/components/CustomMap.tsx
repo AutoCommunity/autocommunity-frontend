@@ -10,6 +10,54 @@ const visitorIcon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
 });
 
+const MarkerTypes = new Map<string, number> ([
+  ["GAS_STATION", 0],
+  ["CAR_WASH", 1],
+  ["SERVICE_STATION:", 2],
+  ["DRIFT", 3],
+  ["DRAG_RACING", 4],
+  ["OTHER", 5]
+]);
+
+const icons = [
+  L.divIcon({
+    className: "icon0",
+    iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+    html: "⛽"
+  }),
+  L.divIcon({
+    className: "icon1",
+    iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+    html: "🧼"
+  }),
+  L.divIcon({
+    className: "icon2",
+    iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+    html: "🛠️"
+  }),
+  L.divIcon({
+    className: "icon3",
+    iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+    html: "🛞"
+  }),
+  L.divIcon({
+    className: "icon4",
+    iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+    html: "🏎️"
+  }),
+  visitorIcon
+]
+
 function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any}) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
@@ -37,7 +85,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
       {
         props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
           <Marker position={marker} 
-            icon={visitorIcon} 
+            icon={icons[MarkerTypes.get(marker.markerType) as number] as any} 
             key={`marker-${idx}`}
             eventHandlers={{
               click: (e) => handleClick(e, marker),
