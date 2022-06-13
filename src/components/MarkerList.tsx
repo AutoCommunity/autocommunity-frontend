@@ -15,7 +15,7 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
           style = {{
             margin: "5px"
           }}
-          key = {item.name}
+          key = {item.name + Math.floor(Math.random() * 10000)}
         >
           <List.Item.Meta
             title={<div>{item.name}</div>}

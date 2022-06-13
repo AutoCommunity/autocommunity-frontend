@@ -4,7 +4,7 @@ import axios from "axios";
 import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu, Modal, Form, message, Input, Button } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import 'antd/dist/antd.min.css'
@@ -30,6 +30,7 @@ class MapMainScreen extends React.Component {
     isLoading: false,
     markers: [],
     isSavingMarker: false,
+    markerAddress: '',
     markerCoords: {lat: 0, lng: 0},
     username: '',
     center: [50.166258, 19.9415741],
@@ -100,11 +101,23 @@ class MapMainScreen extends React.Component {
     this.setState({markers: data, isLoading: false});
   }
 
-  async saveMarkers(newMarkerCoords: any){
+  async getAddressByCoordinates(newMarkerCoords: L.LatLng) {
+    console.log(JSON.stringify(newMarkerCoords, null, 2));
+    const result = await axios
+      .get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${newMarkerCoords.lat}&lon=${newMarkerCoords.lng}`)
+      .then(response => {
+        console.log(response.data);
+        return response.data.display_name;
+      });
+    return result;
+  }
+
+  async saveMarkers(newMarkerCoords: L.LatLng){
     if (this.state.username === '') {
       message.warning("Please login to add places");
     } else {
-      this.setState({isSavingMarker: true, markerCoords: newMarkerCoords});
+      const newMarkerAddress = await this.getAddressByCoordinates(newMarkerCoords);
+      this.setState({isSavingMarker: true, markerAddress: newMarkerAddress, markerCoords: newMarkerCoords});
     }
   }
   
@@ -218,6 +231,20 @@ class MapMainScreen extends React.Component {
               onFinish={this.sendMarker}
               autoComplete="off"
             >
+              <Form.Item
+                label="Address"
+                name="address"
+                tooltip={{ title: 'Please make sure the address is correct', placement: "right" }}
+              >
+                <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
+                  <div>
+                    <Input
+                      disabled
+                      value={this.state.markerAddress}
+                    />
+                  </div>
+                </Tooltip>
+              </Form.Item>
               <Form.Item
                 label="Name"
                 name="name"
