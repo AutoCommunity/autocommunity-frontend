@@ -1,14 +1,56 @@
 import React, { useReducer } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from "leaflet";
 
-const visitorIcon = L.icon({
+
+const baseIconOptions : L.BaseIconOptions= {
   iconSize: [25, 41],
   iconAnchor: [10, 41],
   popupAnchor: [2, -40],
-  iconUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
-});
+} 
+
+export const MarkerTypes = new Map<string, number> ([
+  ["GAS_STATION", 0],
+  ["CAR_WASH", 1],
+  ["SERVICE_STATION:", 2],
+  ["DRIFT", 3],
+  ["DRAG_RACING", 4],
+  ["OTHER", 5]
+]);
+
+const icons = [ 
+  L.divIcon({
+    className: "icon-gas-station",
+    ...baseIconOptions,
+    html: `<div><span style="font-size: 25px">⛽</span></div>`
+  }),
+  L.divIcon({
+    className: "icon-car-wash",
+    ...baseIconOptions,
+    html: `<div><span style="font-size: 25px">🧼</span></div>`
+  }),
+  L.divIcon({
+    className: "icon-service-station",
+    ...baseIconOptions,
+    html: `<div><span style="font-size: 25px">🛠️</span></div>`
+  }),
+  L.divIcon({
+    className: "icon-drift",
+    ...baseIconOptions,
+    html: `<div><span style="font-size: 30px">🚗</span></div>`
+  }),
+  L.divIcon({
+    className: "icon-drag-racing",
+    ...baseIconOptions,
+    html: `<div><span style="font-size: 30px">🏎️</span></div>`
+  }),
+  L.icon({
+    className: "icon-default",
+    ...baseIconOptions,
+    iconUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
+  })
+]
 
 function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any}) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,9 +68,6 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   });
 
   const handleClick = (e: any, marker: any) => {
-    e.target._popup._closeButton.onclick = (event: any) => event.preventDefault();
-    e.target._popup._closeButton.href = "";
-    e.target.openPopup();
     props.selectMarker(marker);
   };
 
@@ -37,13 +76,12 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
       {
         props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
           <Marker position={marker} 
-            icon={visitorIcon} 
+            icon={icons[MarkerTypes.get(marker.markerType) as number]} 
             key={`marker-${idx}`}
             eventHandlers={{
               click: (e) => handleClick(e, marker),
             }}
-          > 
-            <Popup>{marker.name}</Popup> 
+          >
           </Marker> 
         )
       }
@@ -54,7 +92,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
 function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2], selectMarker: any}){
   return (
     <MapContainer
-        key = {JSON.stringify([props.center, new Date().getDate()] )}
+        key={JSON.stringify([props.center, new Date().getDate()] )}
         preferCanvas={true}
         center={props.center} 
         zoom={12}

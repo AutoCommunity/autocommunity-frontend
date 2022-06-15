@@ -4,7 +4,7 @@ import axios from "axios";
 import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import 'antd/dist/antd.min.css'
@@ -14,7 +14,7 @@ import MarkerInfoModal from "./MarkerInfoModal";
 
 
 
-
+const { Option } = Select;
 
 class MapMainScreen extends React.Component {
   constructor(props: any) {
@@ -73,9 +73,10 @@ class MapMainScreen extends React.Component {
   }
 
   async sendMarker(event: any){
+    console.log(event);
     const requestBody = {
       name: event.name,
-      markerType: 0,
+      markerType: event.markerType,
       lat: this.state.markerCoords.lat,
       lng: this.state.markerCoords.lng
     }
@@ -230,6 +231,9 @@ class MapMainScreen extends React.Component {
               wrapperCol={{ span: 16 }}
               onFinish={this.sendMarker}
               autoComplete="off"
+              initialValues={{
+                "markerType": "5",
+              }}
             >
               <Form.Item
                 label="Address"
@@ -251,6 +255,20 @@ class MapMainScreen extends React.Component {
                 rules={[{ required: true, message: 'Please input name of your place!' }]}
               >
                 <Input />
+              </Form.Item>
+
+              <Form.Item
+                label = "Marker Type"
+                name = "markerType"
+              >
+                <Select>
+                  <Option value="0">Gas Station ⛽</Option>
+                  <Option value="1">Car Wash 🧼</Option>
+                  <Option value="2">Service Station 🛠️</Option>
+                  <Option value="3">Drift 🚗</Option>
+                  <Option value="4">Drag racing 🏎️</Option>
+                  <Option value="5">Other</Option>
+                </Select>
               </Form.Item>
 
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
