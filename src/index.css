@@ -9,3 +9,8 @@
   font-weight:bold;
   background: rgba(255, 255, 255, 0.2);
 }
+
+.leaflet-tile-pane, .leafet-control-attribution {
+  -webkit-filter: invert(100%) hue-rotate(180deg) brightness(75%) contrast(85%);
+  filter: invert(100%) hue-rotate(180deg) brightness(75%) contrast(85%);
+}

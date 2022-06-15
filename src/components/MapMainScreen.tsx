@@ -231,6 +231,9 @@ class MapMainScreen extends React.Component {
               wrapperCol={{ span: 16 }}
               onFinish={this.sendMarker}
               autoComplete="off"
+              initialValues={{
+                "markerType": "5",
+              }}
             >
               <Form.Item
                 label="Address"
@@ -258,11 +261,11 @@ class MapMainScreen extends React.Component {
                 label = "Marker Type"
                 name = "markerType"
               >
-                <Select defaultValue="5">
+                <Select>
                   <Option value="0">Gas Station ⛽</Option>
                   <Option value="1">Car Wash 🧼</Option>
                   <Option value="2">Service Station 🛠️</Option>
-                  <Option value="3">Drift 🛞</Option>
+                  <Option value="3">Drift 🚗</Option>
                   <Option value="4">Drag racing 🏎️</Option>
                   <Option value="5">Other</Option>
                 </Select>
