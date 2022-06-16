@@ -159,15 +159,17 @@ class MapMainScreen extends React.Component {
                 style = {{
                   padding: "5px"
                 }}
-                theme="dark" mode="inline" defaultSelectedKeys={['auth']}
+                theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
                 className="main-menu"
+                items = {
+                  [
+                    {
+                      key: 'menu-item-auth',
+                      label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                    }
+                  ]
+                }
               >
-                <Menu.Item
-                  key="auth"
-                  className="menu-item-auth"
-                >
-                  <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
-                </Menu.Item>
               </Menu>
 
               <MarkerList
