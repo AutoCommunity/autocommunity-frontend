@@ -44,12 +44,11 @@ const icons = [
     ...baseIconOptions,
     html: `<div><span style="font-size: 30px">🏎️</span></div>`
   }),
-  L.icon({
+  L.divIcon({
     className: "icon-default",
     ...baseIconOptions,
-    iconUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png",
-    shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
-  })
+    html: `<div><span style="font-size: 30px">👻</span></div>`
+  }),
 ]
 
 function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any}) {
