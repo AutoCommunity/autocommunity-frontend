@@ -160,9 +160,11 @@ class MapMainScreen extends React.Component {
                   padding: "5px"
                 }}
                 theme="dark" mode="inline" defaultSelectedKeys={['auth']}
+                className="main-menu"
               >
                 <Menu.Item
                   key="auth"
+                  className="menu-item-auth"
                 >
                   <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
                 </Menu.Item>

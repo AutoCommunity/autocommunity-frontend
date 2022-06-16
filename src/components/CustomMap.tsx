@@ -12,7 +12,7 @@ const baseIconOptions : L.BaseIconOptions= {
 export const MarkerTypes = new Map<string, number> ([
   ["GAS_STATION", 0],
   ["CAR_WASH", 1],
-  ["SERVICE_STATION:", 2],
+  ["SERVICE_STATION", 2],
   ["DRIFT", 3],
   ["DRAG_RACING", 4],
   ["OTHER", 5]
@@ -73,9 +73,8 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   return (
     <React.Fragment>
       {
-        props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => {
-          console.log(marker.markerType, MarkerTypes.get(marker.markerType), icons[MarkerTypes.get(marker.markerType) as number]);
-          return <Marker position={marker}
+        props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
+          <Marker position={marker}
             icon={icons[MarkerTypes.get(marker.markerType) as number]} 
             key={`marker-${idx}`}
             eventHandlers={{
@@ -83,7 +82,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
             }}
           >
           </Marker> 
-        })
+        )
       }
     </React.Fragment>
   );
