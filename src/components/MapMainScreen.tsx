@@ -4,7 +4,7 @@ import axios from "axios";
 import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select, Space } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import Sider from "antd/lib/layout/Sider";
@@ -149,11 +149,12 @@ class MapMainScreen extends React.Component {
             width={'20%'}
           >
             <Layout style={{ minHeight: "100vh" }}>
-              <Header>
+              <Header style={{ position: 'fixed', zIndex: 2, width: '20%' }}>
                 <div className="logo"> Autocommunity </div>
               </Header>
               <Content
                 style={{
+                  marginTop: 64,
                   padding: 0,
                   height: "90%",
                 }}
@@ -193,8 +194,10 @@ class MapMainScreen extends React.Component {
                   bottom: 0,
                 }}
               >
-                Autocommunity, 2022
-                <Button onClick={toggleTheme}>Toggle Theme</Button>
+                <Space>
+                  Autocommunity, 2022
+                  <Button onClick={toggleTheme}>Toggle Theme</Button>
+                </Space>
               </Footer>
             </Layout>
           </Sider>
@@ -306,12 +309,13 @@ class MapMainScreen extends React.Component {
             }}
             width={'300px'}
           >
+            <Header style={{ position: 'fixed', zIndex: 2, width: 'inherit'}}>
+              <div className="logo"> Autocommunity </div>
+            </Header>
             <Layout style={{ minHeight: "100vh" }}>
-              <Header>
-                <div className="logo"> Autocommunity </div>
-              </Header>
               <Content
                 style={{
+                  marginTop: 64,
                   padding: 0,
                   height: "90%",
                 }}
@@ -351,8 +355,10 @@ class MapMainScreen extends React.Component {
                   bottom: 0,
                 }}
               >
-                Autocommunity, 2022
-                <Button onClick={toggleTheme}>Toggle Theme</Button>
+                <Space>
+                  Autocommunity, 2022
+                  <Button onClick={toggleTheme}>Toggle Theme</Button>
+                </Space>
               </Footer>
             </Layout>
           </Sider>
