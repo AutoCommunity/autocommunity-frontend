@@ -4,7 +4,6 @@ import reportWebVitals from './reportWebVitals';
 import MapMainScreen from './components/MapMainScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 ReactDOM.render(
   <MapMainScreen/>,
   document.getElementById('root')

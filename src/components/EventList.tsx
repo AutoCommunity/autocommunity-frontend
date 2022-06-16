@@ -4,7 +4,6 @@ function EventList(props: {events: any[]}) {
   return (
     <List
       style={{
-        background: "white",
         margin: "5px"
       }}
       bordered={true}
