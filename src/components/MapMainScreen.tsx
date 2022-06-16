@@ -12,7 +12,7 @@ import MarkerList from "./MarkerList";
 import MarkerInfoModal from "./MarkerInfoModal";
 import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
 import { isMobile } from 'react-device-detect';
-import { toggleTheme } from "./ToggleTheme";
+import { toggleTheme, forceSetTheme } from "./ToggleTheme";
 
 const { Option } = Select;
 
@@ -132,7 +132,7 @@ class MapMainScreen extends React.Component {
   }
 
   render() {
-    console.log('rerender bro');
+    forceSetTheme();
     if (!isMobile) {
       return (
         <Layout className="layout">
