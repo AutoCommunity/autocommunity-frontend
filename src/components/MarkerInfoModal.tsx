@@ -4,6 +4,8 @@ import axios from "axios";
 import { Modal, Button } from 'antd';
 import EventList from './EventList';
 import AddEventForm from './AddEventForm';
+import { Modal as MobileModal, Button as MobileButton } from 'antd-mobile';
+import { isMobile } from 'react-device-detect';
 
 interface MarkerInfoModalProps {
     marker: any,
@@ -23,28 +25,59 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalP
 
     const [addingEvent, setAddingEvent] = useState(false);
 
-    return (
-        <>
-        <Modal title={props.marker.name} 
-                visible={props.marker.id !== undefined && props.marker.id !== ''} 
-                footer={null}
-                onCancel={() => props.selectMarker({})}
-        >
-            <EventList events ={events}/>
-            <Button type = "primary" onClick = {() => setAddingEvent(true)}>
-                Add event
-            </Button>
-            <Modal title = "Add new event at the current marker"
-                    visible = {addingEvent}
-                    footer = {null}
-                    onCancel = {() => setAddingEvent(false)}
-                    width={600}
+    if (!isMobile) {
+        return (
+            <>
+            <Modal title={props.marker.name} 
+                    visible={props.marker.id !== undefined && props.marker.id !== ''} 
+                    footer={null}
+                    onCancel={() => props.selectMarker({})}
             >
-                <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                <EventList events ={events}/>
+                <Button type = "primary" onClick = {() => setAddingEvent(true)}>
+                    Add event
+                </Button>
+                <Modal title = "Add new event at the current marker"
+                        visible = {addingEvent}
+                        footer = {null}
+                        onCancel = {() => setAddingEvent(false)}
+                        width={600}
+                >
+                    <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                </Modal>
             </Modal>
-        </Modal>
-        </>
-    );
+            </>
+        );
+    }
+    else {
+        return (
+            <>
+                <MobileModal title={props.marker.name} 
+                    visible={props.marker.id !== undefined && props.marker.id !== ''}
+                    onClose={() => props.selectMarker({})}
+                    showCloseButton={true}
+                    content={
+                        <>
+                            <EventList events ={events}/>
+                            <MobileButton color = "primary" onClick = {() => setAddingEvent(true)}>
+                                Add event
+                            </MobileButton>
+                            <MobileModal title = "Add new event at the current marker"
+                                visible = {addingEvent}
+                                onClose = {() => setAddingEvent(false)}
+                                showCloseButton={true}
+                                content={
+                                    <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                                }
+                            >
+                            </MobileModal>
+                        </>
+                    }
+                >
+                </MobileModal>
+            </>
+        );
+    }
 };
 export default MarkerInfoModal;
 

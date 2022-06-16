@@ -11,7 +11,8 @@ import 'antd/dist/antd.min.css'
 import Sider from "antd/lib/layout/Sider";
 import MarkerList from "./MarkerList";
 import MarkerInfoModal from "./MarkerInfoModal";
-
+import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
+import { isMobile } from 'react-device-detect';
 
 
 const { Option } = Select;
@@ -34,7 +35,9 @@ class MapMainScreen extends React.Component {
     markerCoords: {lat: 0, lng: 0},
     username: '',
     center: [50.166258, 19.9415741],
-    selectedMarker: {}
+    selectedMarker: {},
+    mobileSelectVisible: false,
+    mobileSelectLabel: 'Other 👻'
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
@@ -130,205 +133,349 @@ class MapMainScreen extends React.Component {
   }
 
   render() {
-    return (
-      <Layout className="layout">
-        <Sider
-          style={{
-            overflow: 'auto',
-            height: '100%',
-            width: '20%',
-            position: 'fixed',
-            left: 0,
-            top: 0,
-            bottom: 0,
-          }}
-          width={'20%'}
-        >
-          <Layout style={{ minHeight: "100vh" }}>
-            <Header>
-              <div className="logo"> Autocommunity </div>
-            </Header>
+    if (!isMobile) {
+      return (
+        <Layout className="layout">
+          <Sider
+            style={{
+              overflow: 'auto',
+              height: '100%',
+              width: '20%',
+              position: 'fixed',
+              left: 0,
+              top: 0,
+              bottom: 0,
+            }}
+            width={'20%'}
+          >
+            <Layout style={{ minHeight: "100vh" }}>
+              <Header>
+                <div className="logo"> Autocommunity </div>
+              </Header>
+              <Content
+                style={{
+                  padding: 0,
+                  height: "90%",
+                  background: "rgb(5, 21, 38)"
+                }}
+              >
+                <Menu
+                  style = {{
+                    padding: "5px"
+                  }}
+                  theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
+                  className="main-menu"
+                  items = {
+                    [
+                      {
+                        key: 'menu-item-auth',
+                        label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                      }
+                    ]
+                  }
+                >
+                </Menu>
+
+                <MarkerList
+                  markers={this.state.markers} 
+                  handleCenterClick = {this.handleCenterClick}
+                  selectMarker = {this.selectMarker}
+                />
+
+              </Content>
+              <Footer
+                style={{
+                  textAlign: 'center',
+                  height: '5%',
+                  position: "sticky",
+                  top: 0,
+                  bottom: 0,
+                  color: 'gray'
+                }}
+              >
+                Autocommunity, 2022
+              </Footer>
+            </Layout>
+          </Sider>
+          <Layout
+            style={{
+              padding: 0,
+            }}
+          >
             <Content
               style={{
                 padding: 0,
-                height: "90%",
-                background: "rgb(5, 21, 38)"
+                height: "100vh",
+                width: "80%",
+                background: 'black',
               }}
             >
-              <Menu
-                style = {{
-                  padding: "5px"
+              <CustomMap
+                style={{
+                  height: "inherit",
+                  width: "inherit",
+                  position: "absolute",
+                  right: "0",
+                  bottom: "0",
+                  top: "0",
                 }}
-                theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
-                className="main-menu"
-                items = {
-                  [
-                    {
-                      key: 'menu-item-auth',
-                      label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
-                    }
-                  ]
-                }
-              >
-              </Menu>
-
-              <MarkerList
-                markers={this.state.markers} 
-                handleCenterClick = {this.handleCenterClick}
+                markers={this.state.markers}
+                saveMarkers = {this.saveMarkers}
+                center={this.state.center}
                 selectMarker = {this.selectMarker}
               />
-
             </Content>
-            <Footer
-              style={{
-                textAlign: 'center',
-                height: '5%',
-                position: "sticky",
-                top: 0,
-                bottom: 0,
-                color: 'gray'
-              }}
-            >
-              Autocommunity, 2022
-            </Footer>
           </Layout>
-        </Sider>
-        <Layout
-          style={{
-            padding: 0,
-          }}
-        >
-          <Content
+
+          { this.state.isSavingMarker &&
+            <Modal title="Woohoo, you're about to add new place! Please enter name:" 
+                  visible={this.state.isSavingMarker} 
+                  footer={null}
+                  onCancel={() => this.setState({isSavingMarker: false})}
+            >
+              <Form 
+                name = "Save marker"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                onFinish={this.sendMarker}
+                autoComplete="off"
+                initialValues={{
+                  "markerType": "5",
+                }}
+              >
+                <Form.Item
+                  label="Address"
+                  name="address"
+                  tooltip={{ title: 'Please make sure the address is correct', placement: "right" }}
+                >
+                  <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
+                    <div>
+                      <Input
+                        disabled
+                        value={this.state.markerAddress}
+                      />
+                    </div>
+                  </Tooltip>
+                </Form.Item>
+                <Form.Item
+                  label="Name"
+                  name="name"
+                  rules={[{ required: true, message: 'Please input name of your place!' }]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  label = "Marker Type"
+                  name = "markerType"
+                >
+                  <Select>
+                    <Option value="0">Gas Station ⛽</Option>
+                    <Option value="1">Car Wash 🧼</Option>
+                    <Option value="2">Service Station 🛠️</Option>
+                    <Option value="3">Drift 🚗</Option>
+                    <Option value="4">Drag racing 🏎️</Option>
+                    <Option value="5">Other 👻</Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                  <Button type="primary" htmlType="submit">
+                    Add place
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
+          }
+
+          <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
+        </Layout>
+      )
+    } else {
+      return (
+        <Layout className="layout">
+          <Sider
+            style={{
+              overflow: 'auto',
+              height: '100%',
+              width: '30%',
+              position: 'fixed',
+              left: 0,
+              top: 0,
+              bottom: 0,
+            }}
+            width={'30%'}
+          >
+            <Layout style={{ minHeight: "100vh" }}>
+              <Header>
+                <div className="logo"> Autocommunity </div>
+              </Header>
+              <Content
+                style={{
+                  padding: 0,
+                  height: "90%",
+                  background: "rgb(5, 21, 38)"
+                }}
+              >
+                <Menu
+                  style = {{
+                    padding: "5px"
+                  }}
+                  theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
+                  className="main-menu"
+                  items = {
+                    [
+                      {
+                        key: 'menu-item-auth',
+                        label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                      }
+                    ]
+                  }
+                >
+                </Menu>
+
+                <MarkerList
+                  markers={this.state.markers} 
+                  handleCenterClick = {this.handleCenterClick}
+                  selectMarker = {this.selectMarker}
+                />
+
+              </Content>
+              <Footer
+                style={{
+                  textAlign: 'center',
+                  height: '5%',
+                  position: "sticky",
+                  top: 0,
+                  bottom: 0,
+                  color: 'gray'
+                }}
+              >
+                Autocommunity, 2022
+              </Footer>
+            </Layout>
+          </Sider>
+          <Layout
             style={{
               padding: 0,
-              height: "100vh",
-              width: "80%",
-              background: 'black',
             }}
           >
-            <CustomMap
+            <Content
               style={{
-                height: "inherit",
-                width: "inherit",
-                position: "absolute",
-                right: "0",
-                bottom: "0",
-                top: "0",
-              }}
-              markers={this.state.markers}
-              saveMarkers = {this.saveMarkers}
-              center={this.state.center}
-              selectMarker = {this.selectMarker}
-            />
-          </Content>
-        </Layout>
-
-        { this.state.isSavingMarker &&
-          <Modal title="Woohoo, you're about to add new place! Please enter name:" 
-                visible={this.state.isSavingMarker} 
-                footer={null}
-                onCancel={() => this.setState({isSavingMarker: false})}
-          >
-            <Form 
-              name = "Save marker"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              onFinish={this.sendMarker}
-              autoComplete="off"
-              initialValues={{
-                "markerType": "5",
+                padding: 0,
+                height: "100vh",
+                width: "70%",
+                background: 'black',
               }}
             >
-              <Form.Item
-                label="Address"
-                name="address"
-                tooltip={{ title: 'Please make sure the address is correct', placement: "right" }}
-              >
-                <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
-                  <div>
-                    <Input
-                      disabled
-                      value={this.state.markerAddress}
-                    />
-                  </div>
-                </Tooltip>
-              </Form.Item>
-              <Form.Item
-                label="Name"
-                name="name"
-                rules={[{ required: true, message: 'Please input name of your place!' }]}
-              >
-                <Input />
-              </Form.Item>
+              <CustomMap
+                style={{
+                  height: "inherit",
+                  width: "inherit",
+                  position: "absolute",
+                  right: "0",
+                  bottom: "0",
+                  top: "0",
+                }}
+                markers={this.state.markers}
+                saveMarkers = {this.saveMarkers}
+                center={this.state.center}
+                selectMarker = {this.selectMarker}
+              />
+            </Content>
+          </Layout>
 
-              <Form.Item
-                label = "Marker Type"
-                name = "markerType"
+          { this.state.isSavingMarker &&
+            <MobileModal 
+              title="Woohoo, you're about to add new place! Please enter name:" 
+              visible={this.state.isSavingMarker}
+              onClose={() => this.setState({isSavingMarker: false})}
+              closeOnMaskClick={true}
+              content={
+                <MobileForm 
+                name = "Save marker"
+                onFinish={this.sendMarker}
+                initialValues={{
+                  "markerType": "5",
+                }}
               >
-                <Select>
-                  <Option value="0">Gas Station ⛽</Option>
-                  <Option value="1">Car Wash 🧼</Option>
-                  <Option value="2">Service Station 🛠️</Option>
-                  <Option value="3">Drift 🚗</Option>
-                  <Option value="4">Drag racing 🏎️</Option>
-                  <Option value="5">Other</Option>
-                </Select>
-              </Form.Item>
+                <MobileForm.Item
+                  label="Address"
+                  name="address"
+                >
+                  <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
+                    <div>
+                      <Input
+                        disabled
+                        value={this.state.markerAddress}
+                      />
+                    </div>
+                  </Tooltip>
+                </MobileForm.Item>
+                <MobileForm.Item
+                  label="Name"
+                  name="name"
+                  rules={[{ required: true, message: 'Please input name of your place!' }]}
+                >
+                  <Input />
+                </MobileForm.Item>
 
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                  Add place
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
-        }
+                <MobileForm.Item
+                  label = "Marker Type"
+                  name = "markerType"
+                >
+                  <MobileButton
+                      onClick={() => {
+                        this.setState({ mobileSelectVisible: true })
+                      }}
+                    >
+                      {this.state.mobileSelectLabel}
+                    </MobileButton>
+                  <MobileSelect
+                    mouseWheel={true}
+                    closeOnMaskClick={true}
+                    visible={this.state.mobileSelectVisible}
+                    onClose={() => {
+                      this.setState({ mobileSelectVisible: false })
+                    }}
+                    onConfirm={(_, ext) => 
+                      this.setState({ mobileSelectLabel: ext.items[0]!.label })
+                    }
+                    cancelText={'Cancel'}
+                    confirmText={'Confirm'}
+                    defaultValue={
+                      [
+                        '5'
+                      ]
+                    }
+                    columns={[
+                      [
+                        { label: 'Gas Station ⛽', value: '0' },
+                        { label: 'Car Wash 🧼', value: '1'},
+                        { label: 'Service Station 🛠️', value: '2'},
+                        { label: 'Drift 🚗', value: '3'},
+                        { label: 'Drag racing 🏎️', value: '4'},
+                        { label: 'Other 👻', value: '5' },
+                      ]
+                    ]}
+                  />
+                </MobileForm.Item>
 
-        <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
-      </Layout>
-      /*
-      <div style={{
-        position: "relative",
-        boxSizing: "border-box",
-      }}>
-        <div style={{
-          minWidth: "30%",
-          maxWidth: "30%",
-          height: "100vh",
-        }}
-        >
-          <Login username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig} />
-          <MarkerList markers = {this.state.markers}/>
-        </div>
-        <CustomMap markers={this.state.markers} saveMarkers = {this.saveMarkers}/>
-        { this.state.username !== '' ?
-        <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add place</Modal.Title>  
-          </Modal.Header>
-          <Modal.Body>
-            Woohoo, you're about to add new place! Please enter name:
-            <Form onSubmit={this.sendMarker}>
-              <Form.Group >
-                <input className="form-control" id="name" />         
-              </Form.Group>
-              <Form.Group >
-                <Button variant="primary" className="form-control btn btn-primary" type="submit">
-                  Add Place
-                </Button>
-              </Form.Group>
-            </Form> 
-          </Modal.Body>
-        </Modal>
-        : <Modal show={this.state.isSavingMarker} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Please login.</Modal.Title>  
-            </Modal.Header>
-          </Modal>
-        }
-      </div>
-      */
-    )
+                <MobileForm.Item>
+                  <MobileButton color="primary" type="submit">
+                    Add place
+                  </MobileButton>
+                </MobileForm.Item>
+              </MobileForm>
+              }
+            >
+            </MobileModal>
+          }
+
+          <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
+        </Layout>
+      )
+    }
   }
 }
 

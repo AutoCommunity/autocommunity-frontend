@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import axios from "axios";
 import { Form, Input, Button, Modal, message } from 'antd';
+import { Modal as MobileModal, Form as MobileForm } from 'antd-mobile';
+import { isMobile } from 'react-device-detect';
 
 interface AuthProps {
     username : string,
@@ -68,57 +70,116 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
     setIsLoginVisible(true);
   };
   const [loginForm] = Form.useForm();
-  if (props.username === '') {
-    return (
-    <>
-      <Button 
-        type="primary"
-        onClick={showModal}
-      >
-        Login or Signup
-      </Button>
-      <Modal title="Login or Sign up" footer = {null} visible={isLoginVisible} onCancel={onCancel}>
-        <Form
-          form={loginForm}
-          name="Login or Sign up"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          initialValues={{ remember: true }}
-          onFinish={handleLoginClick}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
-    );
-  } else {
-    return (
+  if (!isMobile) {
+    if (props.username === '') {
+      return (
       <>
-      {props.username}
-      <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
+        <Button 
+          type="primary"
+          onClick={showModal}
+        >
+          Login or Signup
+        </Button>
+        <Modal title="Login or Sign up" footer = {null} visible={isLoginVisible} onCancel={onCancel}>
+          <Form
+            form={loginForm}
+            name="Login or Sign up"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            onFinish={handleLoginClick}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </>
-    )
+      );
+    } else {
+      return (
+        <>
+        {props.username}
+        <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
+        </>
+      )
+    }
+  } else {
+    if (props.username === '') {
+      return (
+      <>
+        <Button 
+          type="primary"
+          onClick={showModal}
+        >
+          Login or Signup
+        </Button>
+        <MobileModal
+          title="Login or Sign up"
+          visible={isLoginVisible}
+          closeOnMaskClick={true}
+          onClose={onCancel}
+          content={
+            <MobileForm
+              form={loginForm}
+              name="Login or Sign up"
+              initialValues={{ remember: true }}
+              onFinish={handleLoginClick}
+            >
+              <MobileForm.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+              >
+                <Input />
+              </MobileForm.Item>
+
+              <MobileForm.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+              >
+                <Input.Password />
+              </MobileForm.Item>
+
+              <MobileForm.Item>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  Submit
+                </Button>
+              </MobileForm.Item>
+            </MobileForm>
+          }
+        >
+        </MobileModal>
+      </>
+      );
+    } else {
+      return (
+        <>
+        {props.username}
+        <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
+        </>
+      )
+    }
   }
 };
 export default Auth;
