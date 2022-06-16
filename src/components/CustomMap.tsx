@@ -73,8 +73,9 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   return (
     <React.Fragment>
       {
-        props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
-          <Marker position={marker} 
+        props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => {
+          console.log(marker.markerType, MarkerTypes.get(marker.markerType), icons[MarkerTypes.get(marker.markerType) as number]);
+          return <Marker position={marker}
             icon={icons[MarkerTypes.get(marker.markerType) as number]} 
             key={`marker-${idx}`}
             eventHandlers={{
@@ -82,7 +83,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
             }}
           >
           </Marker> 
-        )
+        })
       }
     </React.Fragment>
   );
