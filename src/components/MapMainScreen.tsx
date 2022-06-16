@@ -309,7 +309,7 @@ class MapMainScreen extends React.Component {
             }}
             width={'300px'}
           >
-            <Header style={{ position: 'fixed', zIndex: 2, width: 'inherit'}}>
+            <Header style={{ position: 'fixed', zIndex: 2, width: '300px'}}>
               <div className="logo"> Autocommunity </div>
             </Header>
             <Layout style={{ minHeight: "100vh" }}>
