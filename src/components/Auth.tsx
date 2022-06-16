@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from "axios";
-import { Form, Input, Button, Modal, message } from 'antd';
+import { Form, Input, Button, Modal, message, Space } from 'antd';
 import { Modal as MobileModal, Form as MobileForm } from 'antd-mobile';
 import { isMobile } from 'react-device-detect';
 
@@ -117,10 +117,10 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
       );
     } else {
       return (
-        <>
-        {props.username}
-        <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
-        </>
+        <Space>
+          {props.username}
+          <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
+        </Space>
       )
     }
   } else {

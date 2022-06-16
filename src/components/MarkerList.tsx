@@ -33,7 +33,7 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
             </Avatar>}
             title={<div>{item.name}</div>}
           />
-          <Space >
+          <Space>
             <Button type="primary" icon={<BarsOutlined />} shape="circle"
               onClick = {
                 () => props.selectMarker(item)
