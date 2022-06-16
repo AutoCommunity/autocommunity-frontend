@@ -3,7 +3,7 @@ import { AimOutlined, BarsOutlined } from "@ant-design/icons";
 import { MarkerTypes } from './CustomMap';
 
 const avatars = [
-  "⛽", "🧼", "🛠️", "🚗", "🏎️"
+  "⛽", "🧼", "🛠️", "🚗", "🏎️", "👻"
 ];
 
 function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker: any}) {
