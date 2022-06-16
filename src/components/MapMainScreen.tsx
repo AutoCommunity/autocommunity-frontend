@@ -136,13 +136,13 @@ class MapMainScreen extends React.Component {
           style={{
             overflow: 'auto',
             height: '100%',
-            width: '30vw',
+            width: '20%',
             position: 'fixed',
             left: 0,
             top: 0,
             bottom: 0,
           }}
-          width={'300px'}
+          width={'20%'}
         >
           <Layout style={{ minHeight: "100vh" }}>
             <Header>
@@ -202,7 +202,7 @@ class MapMainScreen extends React.Component {
             style={{
               padding: 0,
               height: "100vh",
-              width: "calc(100% - 300px)",
+              width: "80%",
               background: 'black',
             }}
           >
