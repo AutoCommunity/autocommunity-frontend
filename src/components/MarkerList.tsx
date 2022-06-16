@@ -23,7 +23,14 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
           key = {item.name + Math.floor(Math.random() * 10000)}
         >
           <List.Item.Meta
-            avatar={<Avatar shape="circle" style={{background: "white"}}>{avatars[MarkerTypes.get(item.markerType) as number]}</Avatar>}
+            avatar={
+            <Avatar shape="circle" style={{background: "white"}}> 
+              <div>
+                <span style={{fontSize: '25px'}}>
+                  {avatars[MarkerTypes.get(item.markerType) as number]}
+                </span>
+              </div>
+            </Avatar>}
             title={<div>{item.name}</div>}
           />
           <Space >
