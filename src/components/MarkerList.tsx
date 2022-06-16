@@ -1,6 +1,7 @@
 import { Button, List, Space, Avatar } from "antd";
 import { AimOutlined, BarsOutlined } from "@ant-design/icons";
 import { MarkerTypes } from './CustomMap';
+import 'antd/dist/antd.variable.min.css';
 
 const avatars = [
   "⛽", "🧼", "🛠️", "🚗", "🏎️", "👻"
@@ -10,7 +11,6 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
   return (
     <List
       style={{
-        background: "white",
         margin: "5px"
       }}
       bordered={true}
@@ -24,7 +24,7 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
         >
           <List.Item.Meta
             avatar={
-            <Avatar shape="circle" style={{background: "white"}}> 
+            <Avatar shape="circle"> 
               <div>
                 <span style={{fontSize: '25px'}}>
                   {avatars[MarkerTypes.get(item.markerType) as number]}

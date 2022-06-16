@@ -7,13 +7,12 @@ import 'leaflet/dist/leaflet.css'
 import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
-import 'antd/dist/antd.min.css'
 import Sider from "antd/lib/layout/Sider";
 import MarkerList from "./MarkerList";
 import MarkerInfoModal from "./MarkerInfoModal";
 import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
 import { isMobile } from 'react-device-detect';
-
+import { toggleTheme } from "./ToggleTheme";
 
 const { Option } = Select;
 
@@ -133,6 +132,7 @@ class MapMainScreen extends React.Component {
   }
 
   render() {
+    console.log('rerender bro');
     if (!isMobile) {
       return (
         <Layout className="layout">
@@ -156,21 +156,22 @@ class MapMainScreen extends React.Component {
                 style={{
                   padding: 0,
                   height: "90%",
-                  background: "rgb(5, 21, 38)"
                 }}
               >
                 <Menu
                   style = {{
                     padding: "5px"
                   }}
-                  theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
+                  //theme="dark" 
+                  mode="inline" 
+                  defaultSelectedKeys={['menu-item-auth']}
                   className="main-menu"
                   items = {
                     [
                       {
                         key: 'menu-item-auth',
                         label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
-                      }
+                      },
                     ]
                   }
                 >
@@ -190,10 +191,10 @@ class MapMainScreen extends React.Component {
                   position: "sticky",
                   top: 0,
                   bottom: 0,
-                  color: 'gray'
                 }}
               >
                 Autocommunity, 2022
+                <Button onClick={toggleTheme}>Toggle Theme</Button>
               </Footer>
             </Layout>
           </Sider>
@@ -207,7 +208,6 @@ class MapMainScreen extends React.Component {
                 padding: 0,
                 height: "100vh",
                 width: "80%",
-                background: 'black',
               }}
             >
               <CustomMap
@@ -298,13 +298,13 @@ class MapMainScreen extends React.Component {
             style={{
               overflow: 'auto',
               height: '100%',
-              width: '30%',
+              width: '300px',
               position: 'fixed',
               left: 0,
               top: 0,
               bottom: 0,
             }}
-            width={'30%'}
+            width={'300px'}
           >
             <Layout style={{ minHeight: "100vh" }}>
               <Header>
@@ -314,14 +314,15 @@ class MapMainScreen extends React.Component {
                 style={{
                   padding: 0,
                   height: "90%",
-                  background: "rgb(5, 21, 38)"
                 }}
               >
                 <Menu
                   style = {{
                     padding: "5px"
                   }}
-                  theme="dark" mode="inline" defaultSelectedKeys={['menu-item-auth']}
+                  //theme="dark" 
+                  mode="inline" 
+                  defaultSelectedKeys={['menu-item-auth']}
                   className="main-menu"
                   items = {
                     [
@@ -348,10 +349,10 @@ class MapMainScreen extends React.Component {
                   position: "sticky",
                   top: 0,
                   bottom: 0,
-                  color: 'gray'
                 }}
               >
                 Autocommunity, 2022
+                <Button onClick={toggleTheme}>Toggle Theme</Button>
               </Footer>
             </Layout>
           </Sider>
@@ -364,8 +365,7 @@ class MapMainScreen extends React.Component {
               style={{
                 padding: 0,
                 height: "100vh",
-                width: "70%",
-                background: 'black',
+                width: "calc(100% - 300px)",
               }}
             >
               <CustomMap

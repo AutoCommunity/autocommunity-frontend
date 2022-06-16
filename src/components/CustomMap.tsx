@@ -91,17 +91,17 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
 function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2], selectMarker: any}){
   return (
     <MapContainer
-        key={JSON.stringify([props.center, new Date().getDate()] )}
-        preferCanvas={true}
-        center={props.center} 
-        zoom={12}
-        style={props.style}
-        >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers} selectMarker = {props.selectMarker}/>
+      key={JSON.stringify([props.center, new Date().getDate()] )}
+      preferCanvas={true}
+      center={props.center} 
+      zoom={12}
+      style={props.style}
+      >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers} selectMarker = {props.selectMarker}/>
 
     </MapContainer>
   );
