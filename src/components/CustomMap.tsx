@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from "leaflet";
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 
 const baseIconOptions : L.BaseIconOptions= {
@@ -73,7 +74,15 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   props.forceSetTheme();
 
   return (
-    <React.Fragment>
+    <MarkerClusterGroup
+      /*iconCreateFunction={ 
+        (cluster) => L.divIcon({
+          ...baseIconOptions,
+          html: '<b>' + cluster.getChildCount() + '</b>',
+        }) 
+      }*/
+      chunkedLoading
+    >
       {
         props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
           <Marker position={marker}
@@ -86,7 +95,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
           </Marker> 
         )
       }
-    </React.Fragment>
+    </MarkerClusterGroup>
   );
 }
 
