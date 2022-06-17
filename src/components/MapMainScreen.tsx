@@ -24,6 +24,7 @@ class MapMainScreen extends React.Component {
     this.saveUsername = this.saveUsername.bind(this);
     this.handleCenterClick = this.handleCenterClick.bind(this);
     this.selectMarker = this.selectMarker.bind(this);
+    this.rateMarker = this.rateMarker.bind(this);
   }
 
   state = {
@@ -44,6 +45,21 @@ class MapMainScreen extends React.Component {
 
   selectMarker(marker: any) {
     this.setState({selectedMarker: marker});
+  }
+
+  async rateMarker(rate: any, marker: any) {
+    await axios.post(process.env.REACT_APP_API_URL + '/api/markers/rate',
+      {
+        rate: rate,
+        markerId: marker.id
+      },
+      {withCredentials: true})
+      .then()
+      .catch(_error => {})
+
+      await this.updateMarkers();
+      const newMarker = this.state.markers.find((mrk: any) => mrk.id === marker.id);
+      if (newMarker)this.selectMarker(newMarker);
   }
 
   async componentDidMount() {
@@ -74,7 +90,14 @@ class MapMainScreen extends React.Component {
     this.setState({ username: newUsername });
   }
 
-  async sendMarker(event: any){
+   async updateMarkers() {
+    const data = await axios
+      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
+      .then(response => response.data);
+    this.setState({markers: data});
+  }
+
+  async sendMarker(event: any) {
     console.log(event);
     const requestBody = {
       name: event.name,
@@ -96,12 +119,8 @@ class MapMainScreen extends React.Component {
           return;
         }
       });
-
-    this.setState({isLoading: true, isSavingMarker: false});
-    const data = await axios
-      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
-      .then(response => response.data);
-    this.setState({markers: data, isLoading: false});
+    
+    await this.updateMarkers();
   }
 
   async getAddressByCoordinates(newMarkerCoords: L.LatLng) {
@@ -292,7 +311,10 @@ class MapMainScreen extends React.Component {
             </Modal>
           }
 
-          <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
+          <MarkerInfoModal marker={this.state.selectedMarker} 
+            selectMarker={this.selectMarker}
+            rateMarker={this.rateMarker}
+          />
         </Layout>
       )
     } else {
@@ -480,7 +502,10 @@ class MapMainScreen extends React.Component {
             </MobileModal>
           }
 
-          <MarkerInfoModal marker={this.state.selectedMarker} selectMarker={this.selectMarker}/>
+          <MarkerInfoModal marker={this.state.selectedMarker}
+            selectMarker={this.selectMarker}
+            rateMarker={this.rateMarker}
+          />
         </Layout>
       )
     }

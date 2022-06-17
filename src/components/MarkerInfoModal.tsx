@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import axios from "axios";
-import { Modal, Button } from 'antd';
+import { Modal, Button, Rate } from 'antd';
 import EventList from './EventList';
 import AddEventForm from './AddEventForm';
 import { Modal as MobileModal, Button as MobileButton } from 'antd-mobile';
@@ -9,7 +9,8 @@ import { isMobile } from 'react-device-detect';
 
 interface MarkerInfoModalProps {
     marker: any,
-    selectMarker: any
+    selectMarker: any,
+    rateMarker: any
 }
 
 const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalProps) => {
@@ -33,6 +34,8 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalP
                     footer={null}
                     onCancel={() => props.selectMarker({})}
             >
+                <Rate allowHalf value={props.marker.rate} onChange = {rate => props.rateMarker(rate, props.marker)}/>
+
                 <EventList events ={events}/>
                 <Button type = "primary" onClick = {() => setAddingEvent(true)}>
                     Add event
