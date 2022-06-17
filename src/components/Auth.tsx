@@ -174,10 +174,10 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
       );
     } else {
       return (
-        <>
+        <Space>
         {props.username}
         <Button type = "primary" onClick={handleLogoutClick}>Logout</Button>
-        </>
+        </Space>
       )
     }
   }

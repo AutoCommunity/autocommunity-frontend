@@ -128,6 +128,7 @@ class MapMainScreen extends React.Component {
     this.setState({
       center: [item.lat, item.lng]
     });
+    forceSetTheme();
     console.log(this.state.center);
   }
 
