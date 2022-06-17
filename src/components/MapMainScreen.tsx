@@ -10,7 +10,7 @@ import '../index.css'
 import Sider from "antd/lib/layout/Sider";
 import MarkerList from "./MarkerList";
 import MarkerInfoModal from "./MarkerInfoModal";
-import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
+import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect, Dropdown as MobileDropdown } from "antd-mobile";
 import { isMobile } from 'react-device-detect';
 import { toggleTheme, forceSetTheme } from "./ToggleTheme";
 
@@ -36,7 +36,8 @@ class MapMainScreen extends React.Component {
     center: [50.166258, 19.9415741],
     selectedMarker: {},
     mobileSelectVisible: false,
-    mobileSelectLabel: 'Other 👻'
+    mobileSelectLabel: 'Other 👻',
+    siderCollapsed: false
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
@@ -139,17 +140,19 @@ class MapMainScreen extends React.Component {
           <Sider
             style={{
               overflow: 'auto',
-              height: '100%',
-              width: '20%',
-              position: 'fixed',
+              height: '100vh',
+              minHeight: '100vh',
+              position: 'sticky',
               left: 0,
               top: 0,
               bottom: 0,
             }}
-            width={'20%'}
+            collapsible
+            collapsed={this.state.siderCollapsed}
+            onCollapse={value => this.setState( { siderCollapsed: value })}
+            collapsedWidth={'50px'}
           >
-            <Layout style={{ minHeight: "100vh" }}>
-              <Header style={{ position: 'fixed', zIndex: 2, width: '20%' }}>
+              <Header style={{ position: 'fixed', zIndex: 2 }}>
                 <div className="logo"> Autocommunity </div>
               </Header>
               <Content
@@ -199,7 +202,6 @@ class MapMainScreen extends React.Component {
                   <Button onClick={toggleTheme}>Toggle Theme</Button>
                 </Space>
               </Footer>
-            </Layout>
           </Sider>
           <Layout
             style={{
@@ -211,6 +213,7 @@ class MapMainScreen extends React.Component {
                 padding: 0,
                 height: "100vh",
                 width: "80%",
+                minWidth: "80%",
               }}
             >
               <CustomMap
@@ -308,6 +311,9 @@ class MapMainScreen extends React.Component {
               top: 0,
               bottom: 0,
             }}
+            collapsible
+            collapsed={this.state.siderCollapsed}
+            onCollapse={value => this.setState( { siderCollapsed: value })}
             width={'300px'}
           >
             <Header style={{ position: 'fixed', zIndex: 2, width: '300px'}}>
