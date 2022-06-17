@@ -128,7 +128,6 @@ class MapMainScreen extends React.Component {
     this.setState({
       center: [item.lat, item.lng]
     });
-    forceSetTheme();
     console.log(this.state.center);
   }
 
@@ -227,6 +226,7 @@ class MapMainScreen extends React.Component {
                 saveMarkers = {this.saveMarkers}
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
+                forceSetTheme = {forceSetTheme}
               />
             </Content>
           </Layout>
@@ -388,6 +388,7 @@ class MapMainScreen extends React.Component {
                 saveMarkers = {this.saveMarkers}
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
+                forceSetTheme = {forceSetTheme}
               />
             </Content>
           </Layout>
