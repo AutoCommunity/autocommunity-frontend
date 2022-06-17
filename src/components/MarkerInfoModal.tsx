@@ -34,7 +34,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalP
                     footer={null}
                     onCancel={() => props.selectMarker({})}
             >
-                <Rate style = {{background: "white"}} allowHalf value={props.marker.rate} onChange = {rate => props.rateMarker(rate, props.marker)}/>
+                <Rate allowHalf value={props.marker.rate} onChange = {rate => props.rateMarker(rate, props.marker)}/>
 
                 <EventList events ={events}/>
                 <Button type = "primary" onClick = {() => setAddingEvent(true)}>
