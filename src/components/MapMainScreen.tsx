@@ -4,7 +4,7 @@ import axios from "axios";
 import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select, Space } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select, Space, Spin } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import Sider from "antd/lib/layout/Sider";
@@ -259,58 +259,60 @@ class MapMainScreen extends React.Component {
                   footer={null}
                   onCancel={() => this.setState({isSavingMarker: false})}
             >
-              <Form 
-                name = "Save marker"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                onFinish={this.sendMarker}
-                autoComplete="off"
-                initialValues={{
-                  "markerType": "5",
-                }}
-              >
-                <Form.Item
-                  label="Address"
-                  name="address"
-                  tooltip={{ title: 'Please make sure the address is correct', placement: "right" }}
+              <Spin spinning={this.state.isLoading}>
+                <Form 
+                  name = "Save marker"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 16 }}
+                  onFinish={this.sendMarker}
+                  autoComplete="off"
+                  initialValues={{
+                    "markerType": "5",
+                  }}
                 >
-                  <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
-                    <div>
-                      <Input
-                        disabled
-                        value={this.state.markerAddress}
-                      />
-                    </div>
-                  </Tooltip>
-                </Form.Item>
-                <Form.Item
-                  label="Name"
-                  name="name"
-                  rules={[{ required: true, message: 'Please input name of your place!' }]}
-                >
-                  <Input />
-                </Form.Item>
+                  <Form.Item
+                    label="Address"
+                    name="address"
+                    tooltip={{ title: 'Please make sure the address is correct', placement: "right" }}
+                  >
+                    <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
+                      <div>
+                        <Input
+                          disabled
+                          value={this.state.markerAddress}
+                        />
+                      </div>
+                    </Tooltip>
+                  </Form.Item>
+                  <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true, message: 'Please input name of your place!' }]}
+                  >
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item
-                  label = "Marker Type"
-                  name = "markerType"
-                >
-                  <Select>
-                    <Option value="0">Gas Station ⛽</Option>
-                    <Option value="1">Car Wash 🧼</Option>
-                    <Option value="2">Service Station 🛠️</Option>
-                    <Option value="3">Drift 🚗</Option>
-                    <Option value="4">Drag racing 🏎️</Option>
-                    <Option value="5">Other 👻</Option>
-                  </Select>
-                </Form.Item>
+                  <Form.Item
+                    label = "Marker Type"
+                    name = "markerType"
+                  >
+                    <Select>
+                      <Option value="0">Gas Station ⛽</Option>
+                      <Option value="1">Car Wash 🧼</Option>
+                      <Option value="2">Service Station 🛠️</Option>
+                      <Option value="3">Drift 🚗</Option>
+                      <Option value="4">Drag racing 🏎️</Option>
+                      <Option value="5">Other 👻</Option>
+                    </Select>
+                  </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                  <Button type="primary" htmlType="submit" loading={this.state.isLoading}>
-                    Add place
-                  </Button>
-                </Form.Item>
-              </Form>
+                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit" loading={this.state.isLoading}>
+                      Add place
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Spin>
             </Modal>
           }
 
