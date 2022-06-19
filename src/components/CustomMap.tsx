@@ -52,7 +52,7 @@ const icons = [
   }),
 ]
 
-function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any, forceSetTheme: any}) {
+function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker: any, forceSetTheme: any, setBounds: any}) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
@@ -63,9 +63,11 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
     click: (e) => {
       props.saveMarkers(e.latlng);
     },
-    dragend: () => forceUpdate(),
-    zoomend: () => forceUpdate(),
+    dragend: () => props.setBounds(map.getBounds()),
+    zoomend: () => props.setBounds(map.getBounds()),
   });
+
+  //props.setBounds(map.getBounds())
 
   const handleClick = (e: any, marker: any) => {
     props.selectMarker(marker);
@@ -79,7 +81,9 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
     >
       {
         props.markers.filter((marker) => map.getBounds().contains(marker)).map((marker, idx) => 
-          <Marker position={marker}
+          <Marker
+            draggable={false}
+            position={marker}
             icon={icons[MarkerTypes.get(marker.markerType) as number]} 
             key={`marker-${idx}`}
             eventHandlers={{
@@ -93,7 +97,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   );
 }
 
-function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2], selectMarker: any, forceSetTheme: any}){
+function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center: any[2], selectMarker: any, forceSetTheme: any, setBounds: any}){
   return (
     <MapContainer
       key={JSON.stringify([props.center, new Date().getDate()] )}
@@ -106,7 +110,8 @@ function CustomMap(props: {style: any, markers: any[], saveMarkers: any, center:
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
-      <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers} selectMarker = {props.selectMarker} forceSetTheme = {props.forceSetTheme}/>
+      <LocationMarkers markers={props.markers} saveMarkers = {props.saveMarkers} selectMarker = {props.selectMarker} 
+      forceSetTheme = {props.forceSetTheme} setBounds = {props.setBounds}/>
 
     </MapContainer>
   );

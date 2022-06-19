@@ -7,14 +7,15 @@ const avatars = [
   "⛽", "🧼", "🛠️", "🚗", "🏎️", "👻"
 ];
 
-function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker: any}) {
+function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker: any, bounds: any}) {
+  console.log('rerender marker list');
   return (
     <List
       style={{
         margin: "5px"
       }}
       bordered={true}
-      dataSource={props.markers}
+      dataSource={props.markers.filter(marker => !props.bounds || props.bounds.contains(marker))}
       pagination={{
         position: 'bottom',
         style: {

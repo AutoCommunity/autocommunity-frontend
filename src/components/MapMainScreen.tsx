@@ -25,6 +25,7 @@ class MapMainScreen extends React.Component {
     this.handleCenterClick = this.handleCenterClick.bind(this);
     this.selectMarker = this.selectMarker.bind(this);
     this.rateMarker = this.rateMarker.bind(this);
+    this.setBounds = this.setBounds.bind(this);
   }
 
   state = {
@@ -37,11 +38,16 @@ class MapMainScreen extends React.Component {
     center: [50.166258, 19.9415741],
     selectedMarker: {},
     mobileSelectVisible: false,
-    mobileSelectLabel: 'Other 👻'
+    mobileSelectLabel: 'Other 👻',
+    bounds: null
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
   handleShow = async () => this.setState({ isSavingMarker: false });
+
+  setBounds(mapBounds: any) {
+    this.setState({ bounds: mapBounds });
+  }
 
   selectMarker(marker: any) {
     this.setState({selectedMarker: marker});
@@ -65,7 +71,7 @@ class MapMainScreen extends React.Component {
   async componentDidMount() {
     this.setState({isLoading: true});
     const data = await axios
-      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
+      .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
     const userData = await this.getUserConfig();
     this.setState({markers: data, isLoading: false, username: userData.username});
@@ -92,7 +98,7 @@ class MapMainScreen extends React.Component {
 
    async updateMarkers() {
     const data = await axios
-      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
+      .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
     this.setState({markers: data});
   }
@@ -201,6 +207,7 @@ class MapMainScreen extends React.Component {
                   markers={this.state.markers} 
                   handleCenterClick = {this.handleCenterClick}
                   selectMarker = {this.selectMarker}
+                  bounds = {this.state.bounds}
                 />
 
               </Content>
@@ -246,6 +253,7 @@ class MapMainScreen extends React.Component {
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
                 forceSetTheme = {forceSetTheme}
+                setBounds = {this.setBounds}
               />
             </Content>
           </Layout>
@@ -366,6 +374,7 @@ class MapMainScreen extends React.Component {
                   markers={this.state.markers} 
                   handleCenterClick = {this.handleCenterClick}
                   selectMarker = {this.selectMarker}
+                  bounds={this.state.bounds}
                 />
 
               </Content>
@@ -411,6 +420,7 @@ class MapMainScreen extends React.Component {
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
                 forceSetTheme = {forceSetTheme}
+                setBounds = {this.setBounds}
               />
             </Content>
           </Layout>
