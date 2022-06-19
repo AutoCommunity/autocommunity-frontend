@@ -62,10 +62,6 @@ class MapMainScreen extends React.Component {
       {withCredentials: true})
       .then()
       .catch(_error => {})
-
-      await this.updateMarkers();
-      const newMarker = this.state.markers.find((mrk: any) => mrk.id === marker.id);
-      if (newMarker)this.selectMarker(newMarker);
   }
 
   async componentDidMount() {
