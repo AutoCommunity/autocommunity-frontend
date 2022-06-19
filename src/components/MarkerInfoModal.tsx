@@ -13,30 +13,54 @@ interface MarkerInfoModalProps {
     rateMarker: any
 }
 
+interface MarkerInfoType {
+    id: string,
+    name: string,
+    markerType: string,
+    lat: number,
+    lng: number,
+    rate: number,
+    rateCnt: number,
+    events: []
+}
+
 const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalProps) => {
-    const [events, setEvents] = useState([]);
-
-    useEffect(() => {
+    const [markerInfo, setMarkerInfo] = useState({} as MarkerInfoType);
+    
+    const updateMarkerInfo = () => {
         if (props.marker.id !== undefined && props.marker.id !== '') {
-            axios.get(process.env.REACT_APP_API_URL + '/api/event/get/marker?markerId=' + props.marker.id)
-                .then(response => setEvents(response.data))
-                .catch(_error => setEvents([]))
+            axios.get(process.env.REACT_APP_API_URL + '/api/markers/get?markerId=' + props.marker.id)
+                .then(response => setMarkerInfo(response.data))
+                .catch(_error => setMarkerInfo({} as MarkerInfoType))
+        } else {
+            setMarkerInfo({} as MarkerInfoType);
         }
-    });
-
+    }
     const [addingEvent, setAddingEvent] = useState(false);
+
+    useEffect(updateMarkerInfo, [props.marker, addingEvent]);
+
 
     if (!isMobile) {
         return (
             <>
-            <Modal title={props.marker.name} 
+            <Modal title={markerInfo.name} 
                     visible={props.marker.id !== undefined && props.marker.id !== ''} 
                     footer={null}
                     onCancel={() => props.selectMarker({})}
             >
-                <Rate allowHalf value={props.marker.rate} onChange = {rate => props.rateMarker(rate, props.marker)}/>
+                <Rate 
+                    allowHalf 
+                    value={markerInfo.rate} 
+                    onChange = { async rate => {
+                            await props.rateMarker(rate, props.marker); 
+                            updateMarkerInfo();
+                        }
+                    }
+                />
+                <span className="ant-rate-text">{markerInfo.rateCnt} votes</span>
 
-                <EventList events ={events}/>
+                <EventList events = {markerInfo.events}/>
                 <Button type = "primary" onClick = {() => setAddingEvent(true)}>
                     Add event
                 </Button>
@@ -55,13 +79,23 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = (props: MarkerInfoModalP
     else {
         return (
             <>
-                <MobileModal title={props.marker.name} 
+                <MobileModal title={markerInfo.name} 
                     visible={props.marker.id !== undefined && props.marker.id !== ''}
                     onClose={() => props.selectMarker({})}
                     showCloseButton={true}
                     content={
                         <>
-                            <EventList events ={events}/>
+                            <Rate 
+                                allowHalf 
+                                value={markerInfo.rate} 
+                                onChange = { async rate => {
+                                        await props.rateMarker(rate, props.marker); 
+                                        updateMarkerInfo();
+                                    }
+                                }
+                            />
+                            <span className="ant-rate-text">{markerInfo.rateCnt} votes</span>
+                            <EventList events ={markerInfo.events}/>
                             <MobileButton color = "primary" onClick = {() => setAddingEvent(true)}>
                                 Add event
                             </MobileButton>

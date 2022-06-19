@@ -56,16 +56,12 @@ class MapMainScreen extends React.Component {
       {withCredentials: true})
       .then()
       .catch(_error => {})
-
-      await this.updateMarkers();
-      const newMarker = this.state.markers.find((mrk: any) => mrk.id === marker.id);
-      if (newMarker)this.selectMarker(newMarker);
   }
 
   async componentDidMount() {
     this.setState({isLoading: true});
     const data = await axios
-      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
+      .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
     const userData = await this.getUserConfig();
     this.setState({markers: data, isLoading: false, username: userData.username});
@@ -92,7 +88,7 @@ class MapMainScreen extends React.Component {
 
    async updateMarkers() {
     const data = await axios
-      .get(process.env.REACT_APP_API_URL + '/api/markers/get')
+      .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
     this.setState({markers: data});
   }
