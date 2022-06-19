@@ -100,6 +100,8 @@ class MapMainScreen extends React.Component {
   }
 
   async sendMarker(event: any) {
+    this.setState({isLoading: true});
+
     console.log(event);
     const requestBody = {
       name: event.name,
@@ -115,13 +117,10 @@ class MapMainScreen extends React.Component {
         console.log(response)
       })
       .catch((error) => {
-        console.log(error.response.data)
-        if (error.response.status === 401) {
-          window.open(process.env.REACT_APP_FRONT_URL + '/login', '_self')
-          return;
-        }
+        console.log(error.response.data);
       });
     
+    this.setState({isLoading: false, isSavingMarker: false});
     await this.updateMarkers();
   }
 
@@ -307,7 +306,7 @@ class MapMainScreen extends React.Component {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" loading={this.state.isLoading}>
                     Add place
                   </Button>
                 </Form.Item>
