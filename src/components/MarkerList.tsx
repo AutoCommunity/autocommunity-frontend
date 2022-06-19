@@ -15,6 +15,12 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
       }}
       bordered={true}
       dataSource={props.markers}
+      pagination={{
+        position: 'bottom',
+        style: {
+          textAlign: 'center',
+        },
+      }}
       renderItem = {(item : {name: any, lat: any, lng: any, markerType: any}) => (
         <List.Item
           style = {{

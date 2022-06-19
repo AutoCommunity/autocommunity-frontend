@@ -75,12 +75,6 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
 
   return (
     <MarkerClusterGroup
-      /*iconCreateFunction={ 
-        (cluster) => L.divIcon({
-          ...baseIconOptions,
-          html: '<b>' + cluster.getChildCount() + '</b>',
-        }) 
-      }*/
       chunkedLoading
     >
       {
