@@ -481,12 +481,10 @@ class MapMainScreen extends React.Component {
                   name="address"
                 >
                   <Tooltip trigger={['hover']} title={this.state.markerAddress} placement="bottom">
-                    <div>
-                      <Input
-                        disabled
-                        value={this.state.markerAddress}
-                      />
-                    </div>
+                    <Input
+                      disabled
+                      value={this.state.markerAddress}
+                    />
                   </Tooltip>
                 </MobileForm.Item>
                 <MobileForm.Item

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import axios from "axios";
-import { Modal, Button, Rate, message } from 'antd';
+import { Modal, Button, Rate, message, Typography } from 'antd';
 import EventList from './EventList';
 import AddEventForm from './AddEventForm';
 import { Modal as MobileModal, Button as MobileButton } from 'antd-mobile';
@@ -21,6 +21,7 @@ interface MarkerInfoType {
     id: string,
     name: string,
     markerType: string,
+    address: string,
     lat: number,
     lng: number,
     rate: number,
@@ -72,6 +73,11 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                         props.globalStorage!.changeMarkerInfoVisible(false);
                     }}
             >
+                <Typography.Text
+                    ellipsis={{ tooltip: markerInfo.address }}
+                >
+                    {markerInfo.address}
+                </Typography.Text>
                 <Rate 
                     allowHalf 
                     value={markerInfo.rate} 
@@ -115,41 +121,44 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
     }
     else {
         return (
-            <>
-                <MobileModal title={markerInfo.name} 
-                    visible={props.marker.id !== undefined && props.marker.id !== ''}
-                    onClose={() => props.selectMarker({})}
-                    showCloseButton={true}
-                    content={
-                        <>
-                            <Rate 
-                                allowHalf 
-                                value={markerInfo.rate} 
-                                onChange = { async rate => {
-                                        await props.rateMarker(rate, props.marker); 
-                                        updateMarkerInfo();
-                                    }
+            <MobileModal title={markerInfo.name} 
+                visible={props.marker.id !== undefined && props.marker.id !== ''}
+                onClose={() => props.selectMarker({})}
+                showCloseButton={true}
+                content={
+                    <>
+                        <Typography.Text
+                            ellipsis={{ tooltip: markerInfo.address }}
+                        >
+                            {markerInfo.address}
+                        </Typography.Text>
+                        <Rate 
+                            allowHalf 
+                            value={markerInfo.rate} 
+                            onChange = { async rate => {
+                                    await props.rateMarker(rate, props.marker); 
+                                    updateMarkerInfo();
                                 }
-                            />
-                            <span className="ant-rate-text">{markerInfo.rateCnt} votes</span>
-                            <EventList events ={markerInfo.events}/>
-                            <MobileButton color = "primary" onClick = {() => setAddingEvent(true)}>
-                                Add event
-                            </MobileButton>
-                            <MobileModal title = "Add new event at the current marker"
-                                visible = {addingEvent}
-                                onClose = {() => setAddingEvent(false)}
-                                showCloseButton={true}
-                                content={
-                                    <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
-                                }
-                            >
-                            </MobileModal>
-                        </>
-                    }
-                >
-                </MobileModal>
-            </>
+                            }
+                        />
+                        <span className="ant-rate-text">{markerInfo.rateCnt} votes</span>
+                        <EventList events ={markerInfo.events}/>
+                        <MobileButton color = "primary" onClick = {() => setAddingEvent(true)}>
+                            Add event
+                        </MobileButton>
+                        <MobileModal title = "Add new event at the current marker"
+                            visible = {addingEvent}
+                            onClose = {() => setAddingEvent(false)}
+                            showCloseButton={true}
+                            content={
+                                <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                            }
+                        >
+                        </MobileModal>
+                    </>
+                }
+            >
+            </MobileModal>
         );
     }
 }
