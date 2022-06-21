@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import axios from "axios";
-import { Modal, Button, Rate, message, Typography } from 'antd';
+import { Modal, Button, Rate, message, Typography, Space } from 'antd';
 import EventList from './EventList';
 import AddEventForm from './AddEventForm';
 import { Modal as MobileModal, Button as MobileButton } from 'antd-mobile';
@@ -84,12 +84,14 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                     onChange = { async rate => {
                             await props.rateMarker(rate, props.marker); 
                             updateMarkerInfo();
+                            props.updateMarkers();
                         }
                     }
                 />
                 <span className="ant-rate-text">{markerInfo.rateCnt} votes</span>
 
                 <EventList events = {markerInfo.events}/>
+                <Space>
                 <Button
                     type = "primary"
                     onClick = {() => setAddingEvent(true)}
@@ -115,6 +117,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                     :
                     <></>
                 }
+                </Space>
             </Modal>
             </>
         );
