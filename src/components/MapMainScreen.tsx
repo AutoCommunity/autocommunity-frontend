@@ -181,53 +181,53 @@ class MapMainScreen extends React.Component {
               <Header style={{ position: 'fixed', zIndex: 2, width: '20%' }}>
                 <div className="logo"> Autocommunity </div>
               </Header>
-              <Content
-                style={{
-                  marginTop: 64,
-                  padding: 0,
-                  height: "90%",
-                }}
-              >
-                <Menu
-                  style = {{
-                    padding: "5px"
+              <Spin spinning={this.state.isLoading}>
+                <Content
+                  style={{
+                    marginTop: 64,
+                    padding: 0,
+                    height: "90%",
                   }}
-                  //theme="dark" 
-                  mode="inline" 
-                  defaultSelectedKeys={['menu-item-auth']}
-                  className="main-menu"
-                  items = {
-                    [
-                      {
-                        key: 'menu-item-auth',
-                        label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
-                      },
-                      {
-                        key: 'menu-item-switch',
-                        label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
-                      }
-                    ]
-                  }
                 >
-                </Menu>
-                <Spin spinning={this.state.isLoading}>
-                  { 
-                  this.state.switchChecked ? 
-                    <MarkerList
-                      markers={this.state.markers} 
-                      handleCenterClick = {this.handleCenterClick}
-                      selectMarker = {this.selectMarker}
-                      bounds = {this.state.bounds}
-                    />
-                  : 
-                    <EventsList
-                      markers = {this.state.markers}
-                      events = {this.state.events}
-                      bounds = {this.state.bounds}
-                    />
-                  }
-                </Spin>
-              </Content>
+                  <Menu
+                    style = {{
+                      padding: "5px"
+                    }}
+                    //theme="dark" 
+                    mode="inline" 
+                    defaultSelectedKeys={['menu-item-auth']}
+                    className="main-menu"
+                    items = {
+                      [
+                        {
+                          key: 'menu-item-auth',
+                          label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                        },
+                        {
+                          key: 'menu-item-switch',
+                          label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
+                        }
+                      ]
+                    }
+                  >
+                  </Menu>
+                    { 
+                    this.state.switchChecked ? 
+                      <MarkerList
+                        markers={this.state.markers} 
+                        handleCenterClick = {this.handleCenterClick}
+                        selectMarker = {this.selectMarker}
+                        bounds = {this.state.bounds}
+                      />
+                    : 
+                      <EventsList
+                        markers = {this.state.markers}
+                        events = {this.state.events}
+                        bounds = {this.state.bounds}
+                      />
+                    }
+                </Content>
+              </Spin>
               <Footer
                 style={{
                   textAlign: 'center',
@@ -365,54 +365,54 @@ class MapMainScreen extends React.Component {
               <div className="logo"> Autocommunity </div>
             </Header>
             <Layout style={{ minHeight: "100vh" }}>
-              <Content
-                style={{
-                  marginTop: 64,
-                  padding: 0,
-                  height: "90%",
-                }}
-              >
-                <Menu
-                  style = {{
-                    padding: "5px"
+              <Spin spinning={this.state.isLoading}>
+                <Content
+                  style={{
+                    marginTop: 64,
+                    padding: 0,
+                    height: "90%",
                   }}
-                  //theme="dark" 
-                  mode="inline" 
-                  defaultSelectedKeys={['menu-item-auth']}
-                  className="main-menu"
-                  items = {
-                    [
-                      {
-                        key: 'menu-item-auth',
-                        label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
-                      },
-                      {
-                        key: 'menu-item-switch',
-                        label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
-                      }
-                    ]
-                  }
                 >
-                </Menu>
-                <Spin spinning={this.state.isLoading}>
-                  { 
-                  this.state.switchChecked ? 
-                    <MarkerList
-                      markers={this.state.markers} 
-                      handleCenterClick = {this.handleCenterClick}
-                      selectMarker = {this.selectMarker}
-                      bounds = {this.state.bounds}
-                    />
-                  : 
-                    <EventsList
-                      markers = {this.state.markers}
-                      events = {this.state.events}
-                      bounds = {this.state.bounds}
-                    />
-                  }
-                </Spin>
+                  <Menu
+                    style = {{
+                      padding: "5px"
+                    }}
+                    //theme="dark" 
+                    mode="inline" 
+                    defaultSelectedKeys={['menu-item-auth']}
+                    className="main-menu"
+                    items = {
+                      [
+                        {
+                          key: 'menu-item-auth',
+                          label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                        },
+                        {
+                          key: 'menu-item-switch',
+                          label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
+                        }
+                      ]
+                    }
+                  >
+                  </Menu>
+                    { 
+                    this.state.switchChecked ? 
+                      <MarkerList
+                        markers={this.state.markers} 
+                        handleCenterClick = {this.handleCenterClick}
+                        selectMarker = {this.selectMarker}
+                        bounds = {this.state.bounds}
+                      />
+                    : 
+                      <EventsList
+                        markers = {this.state.markers}
+                        events = {this.state.events}
+                        bounds = {this.state.bounds}
+                      />
+                    }
 
-              </Content>
+                </Content>
+              </Spin>
               <Footer
                 style={{
                   textAlign: 'center',
