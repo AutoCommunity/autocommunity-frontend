@@ -122,7 +122,8 @@ class MapMainScreen extends React.Component {
       name: event.name,
       markerType: event.markerType,
       lat: this.state.markerCoords.lat,
-      lng: this.state.markerCoords.lng
+      lng: this.state.markerCoords.lng,
+      address: this.state.markerAddress,
     }
     await axios
       .post(process.env.REACT_APP_API_URL + '/api/markers/add', requestBody, {
