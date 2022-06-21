@@ -64,6 +64,7 @@ const MarkerList: FC<MarkerListProps> = inject(
                   {item.address}
                 </Typography.Text>
                 <Rate
+                  allowHalf
                   disabled={true}
                   value={item.rate}
                 />
