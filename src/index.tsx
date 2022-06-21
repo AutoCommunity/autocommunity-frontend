@@ -4,8 +4,13 @@ import reportWebVitals from './reportWebVitals';
 import MapMainScreen from './components/MapMainScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import Storages from './storage/Storages';
+import { Provider } from 'mobx-react';
+
 ReactDOM.render(
-  <MapMainScreen/>,
+  <Provider {...Storages}>
+    <MapMainScreen/>
+  </Provider>,
   document.getElementById('root')
 );
 

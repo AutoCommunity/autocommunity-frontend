@@ -2,30 +2,47 @@ import { Button, List, Space, Avatar } from "antd";
 import { AimOutlined, BarsOutlined } from "@ant-design/icons";
 import { MarkerTypes } from './CustomMap';
 import 'antd/dist/antd.variable.min.css';
+import { inject, observer } from "mobx-react";
+import GlobalStorage from "../storage/GlobalStorage";
+import { FC } from "react";
 
 const avatars = [
   "⛽", "🧼", "🛠️", "🚗", "🏎️", "👻"
 ];
 
-function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker: any, bounds: any}) {
-  console.log('rerender marker list');
+interface MarkerListProps {
+  globalStorage: GlobalStorage;
+  markers: any[];
+  handleCenterClick: any;
+  selectMarker: any;
+  bounds: any;
+}
+
+const MarkerList: FC<MarkerListProps> = inject(
+  'globalStorage'
+)
+ (observer(({globalStorage, markers, handleCenterClick, selectMarker, bounds}) => {
+  const borderColor = globalStorage.theme === "light" ? "black" : "rgb(240,242,245)";
   return (
     <List
       style={{
-        margin: "5px"
+        margin: "5px",
+        borderColor: borderColor
       }}
       bordered={true}
-      dataSource={props.markers.filter(marker => !props.bounds || props.bounds.contains(marker))}
+      dataSource={markers.filter(marker => !bounds || bounds.contains(marker))}
       pagination={{
         position: 'bottom',
         style: {
           textAlign: 'center',
         },
+        responsive: true
       }}
       renderItem = {(item : {name: any, lat: any, lng: any, markerType: any}) => (
         <List.Item
           style = {{
-            margin: "5px"
+            margin: "5px",
+            borderColor: borderColor
           }}
           key = {item.name + Math.floor(Math.random() * 10000)}
         >
@@ -43,12 +60,12 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
           <Space>
             <Button type="primary" icon={<BarsOutlined />} shape="circle"
               onClick = {
-                () => props.selectMarker(item)
+                () => selectMarker(item)
               }
             />
             <Button type="primary" icon={<AimOutlined />} shape="circle"
               onClick = {
-                () => props.handleCenterClick(item)
+                () => handleCenterClick(item)
               }
             />
         </Space>
@@ -57,5 +74,7 @@ function MarkerList(props: {markers: any[], handleCenterClick: any, selectMarker
     />
   );
 }
+)
+ );
 
 export default MarkerList;

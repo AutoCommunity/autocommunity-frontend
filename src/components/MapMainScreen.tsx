@@ -12,13 +12,17 @@ import MarkerList from "./MarkerList";
 import MarkerInfoModal from "./MarkerInfoModal";
 import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
 import { isMobile } from 'react-device-detect';
-import { toggleTheme, forceSetTheme } from "./ToggleTheme";
+import { inject } from "mobx-react";
+import GlobalStorage from "../storage/GlobalStorage";
 
 const { Option } = Select;
 
+@inject('globalStorage')
 class MapMainScreen extends React.Component {
+  globalStorage: GlobalStorage;
   constructor(props: any) {
     super(props)
+    this.globalStorage = props.globalStorage;
     this.saveMarkers = this.saveMarkers.bind(this);
     this.sendMarker = this.sendMarker.bind(this);
     this.saveUsername = this.saveUsername.bind(this);
@@ -26,6 +30,7 @@ class MapMainScreen extends React.Component {
     this.selectMarker = this.selectMarker.bind(this);
     this.rateMarker = this.rateMarker.bind(this);
     this.setBounds = this.setBounds.bind(this);
+    this.updateMarkers = this.updateMarkers.bind(this);
   }
 
   state = {
@@ -51,6 +56,7 @@ class MapMainScreen extends React.Component {
 
   selectMarker(marker: any) {
     this.setState({selectedMarker: marker});
+    this.globalStorage.changeMarkerInfoVisible(true);
   }
 
   async rateMarker(rate: any, marker: any) {
@@ -69,7 +75,7 @@ class MapMainScreen extends React.Component {
     const data = await axios
       .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
-    const userData = await this.getUserConfig();
+    const userData = await this.getUserConfig();  
     this.setState({markers: data, isLoading: false, username: userData.username});
   }
 
@@ -79,6 +85,7 @@ class MapMainScreen extends React.Component {
         withCredentials: true,
       })
       .then(response => {
+        this.globalStorage.userLogin(response.data.username);
         return response.data;
       })
       .catch(_error => {
@@ -152,7 +159,7 @@ class MapMainScreen extends React.Component {
   }
 
   render() {
-    forceSetTheme();
+    this.globalStorage.forceSetTheme();
     if (!isMobile) {
       return (
         <Layout className="layout">
@@ -199,12 +206,11 @@ class MapMainScreen extends React.Component {
                 </Menu>
 
                 <MarkerList
-                  markers={this.state.markers} 
-                  handleCenterClick = {this.handleCenterClick}
-                  selectMarker = {this.selectMarker}
-                  bounds = {this.state.bounds}
+                  markers={this.state.markers}
+                  handleCenterClick={this.handleCenterClick}
+                  selectMarker={this.selectMarker}
+                  bounds={this.state.bounds}
                 />
-
               </Content>
               <Footer
                 style={{
@@ -217,7 +223,7 @@ class MapMainScreen extends React.Component {
               >
                 <Space>
                   Autocommunity, 2022
-                  <Button onClick={toggleTheme}>Toggle Theme</Button>
+                  <Button onClick={this.globalStorage.toggleTheme}>Toggle Theme</Button>
                 </Space>
               </Footer>
             </Layout>
@@ -247,7 +253,7 @@ class MapMainScreen extends React.Component {
                 saveMarkers = {this.saveMarkers}
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
-                forceSetTheme = {forceSetTheme}
+                forceSetTheme = {this.globalStorage.forceSetTheme}
                 setBounds = {this.setBounds}
               />
             </Content>
@@ -316,9 +322,11 @@ class MapMainScreen extends React.Component {
             </Modal>
           }
 
-          <MarkerInfoModal marker={this.state.selectedMarker} 
+          <MarkerInfoModal
+            marker={this.state.selectedMarker} 
             selectMarker={this.selectMarker}
             rateMarker={this.rateMarker}
+            updateMarkers={this.updateMarkers}
           />
         </Layout>
       )
@@ -386,7 +394,7 @@ class MapMainScreen extends React.Component {
               >
                 <Space>
                   Autocommunity, 2022
-                  <Button onClick={toggleTheme}>Toggle Theme</Button>
+                  <Button onClick={this.globalStorage.toggleTheme}>Toggle Theme</Button>
                 </Space>
               </Footer>
             </Layout>
@@ -416,7 +424,7 @@ class MapMainScreen extends React.Component {
                 saveMarkers = {this.saveMarkers}
                 center={this.state.center}
                 selectMarker = {this.selectMarker}
-                forceSetTheme = {forceSetTheme}
+                forceSetTheme = {this.globalStorage.forceSetTheme}
                 setBounds = {this.setBounds}
               />
             </Content>
