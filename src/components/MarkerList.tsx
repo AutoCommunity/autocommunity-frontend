@@ -1,4 +1,4 @@
-import { Button, List, Space, Avatar } from "antd";
+import { Button, List, Space, Avatar, Typography, Rate } from "antd";
 import { AimOutlined, BarsOutlined } from "@ant-design/icons";
 import { MarkerTypes } from './CustomMap';
 import 'antd/dist/antd.variable.min.css';
@@ -38,7 +38,7 @@ const MarkerList: FC<MarkerListProps> = inject(
         },
         responsive: true
       }}
-      renderItem = {(item : {name: any, lat: any, lng: any, markerType: any}) => (
+      renderItem = {(item : {name: any, lat: any, lng: any, markerType: any, address: any, rate: any}) => (
         <List.Item
           style = {{
             margin: "5px",
@@ -56,6 +56,19 @@ const MarkerList: FC<MarkerListProps> = inject(
               </div>
             </Avatar>}
             title={<div>{item.name}</div>}
+            description={
+              <>
+                <Typography.Text
+                  ellipsis={{ tooltip: item.address }}
+                >
+                  {item.address}
+                </Typography.Text>
+                <Rate
+                  disabled={true}
+                  value={item.rate}
+                />
+              </>
+            }
           />
           <Space>
             <Button type="primary" icon={<BarsOutlined />} shape="circle"

@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from 'react-leaflet';
 import L from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 
@@ -87,8 +87,11 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
             key={`marker-${idx}`}
             eventHandlers={{
               click: (e) => handleClick(e, marker),
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup(),
             }}
           >
+            <Popup>{marker.address}</Popup>
           </Marker> 
         )
       }
