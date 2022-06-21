@@ -10,7 +10,7 @@ import GlobalStorage from '../storage/GlobalStorage';
 import { inject, observer } from 'mobx-react';
 
 interface MarkerInfoModalProps {
-    globalStorage: GlobalStorage,
+    globalStorage?: GlobalStorage,
     marker: any,
     selectMarker: any,
     rateMarker: any,
@@ -53,7 +53,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                 message.error('Could not remove marker');
               });
         props.updateMarkers();
-        props.globalStorage.changeMarkerInfoVisible(false);
+        props.globalStorage!.changeMarkerInfoVisible(false);
     }
 
     const [addingEvent, setAddingEvent] = useState(false);
@@ -65,11 +65,11 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
         return (
             <>
             <Modal title={markerInfo.name} 
-                    visible={props.globalStorage.markerInfoVisible} 
+                    visible={props.globalStorage!.markerInfoVisible} 
                     footer={null}
                     onCancel={() => {
                         props.selectMarker({});
-                        props.globalStorage.changeMarkerInfoVisible(false);
+                        props.globalStorage!.changeMarkerInfoVisible(false);
                     }}
             >
                 <Rate 
@@ -99,7 +99,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                     <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
                 </Modal>
                 {
-                    markerInfo.owner === props.globalStorage.username ?
+                    markerInfo.owner === props.globalStorage!.username ?
                     <Button
                         danger = {true}
                         onClick = {async () => await removeMarker(markerInfo.id)}

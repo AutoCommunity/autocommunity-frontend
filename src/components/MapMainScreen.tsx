@@ -517,9 +517,11 @@ class MapMainScreen extends React.Component {
             </MobileModal>
           }
 
-          <MarkerInfoModal marker={this.state.selectedMarker}
+          <MarkerInfoModal
+            marker={this.state.selectedMarker}
             selectMarker={this.selectMarker}
             rateMarker={this.rateMarker}
+            updateMarkers={this.updateMarkers}
           />
         </Layout>
       )

@@ -11,7 +11,7 @@ const avatars = [
 ];
 
 interface MarkerListProps {
-  globalStorage: GlobalStorage;
+  globalStorage?: GlobalStorage;
   markers: any[];
   handleCenterClick: any;
   selectMarker: any;
@@ -22,7 +22,7 @@ const MarkerList: FC<MarkerListProps> = inject(
   'globalStorage'
 )
  (observer(({globalStorage, markers, handleCenterClick, selectMarker, bounds}) => {
-  const borderColor = globalStorage.theme === "light" ? "black" : "rgb(240,242,245)";
+  const borderColor = globalStorage!.theme === "light" ? "black" : "rgb(240,242,245)";
   return (
     <List
       style={{
