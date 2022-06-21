@@ -29,7 +29,9 @@ class GlobalStorage {
 
     @action
     userLogin(username: string) {
+        console.log('username ' + username);
         this.username = username;
+        console.log('set up username');
     }
 
 

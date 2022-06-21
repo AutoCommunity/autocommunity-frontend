@@ -32,6 +32,7 @@ class MapMainScreen extends React.Component {
     this.rateMarker = this.rateMarker.bind(this);
     this.setBounds = this.setBounds.bind(this);
     this.updateMarkers = this.updateMarkers.bind(this);
+    this.getUserConfig = this.getUserConfig.bind(this, this.globalStorage);
   }
 
   state = {
