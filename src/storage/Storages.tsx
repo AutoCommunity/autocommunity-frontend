@@ -2,4 +2,8 @@ import GlobalStorage from "./GlobalStorage";
 
 const globalStorage = new GlobalStorage();
 
-export default globalStorage;
+const exportedStorages = {
+    globalStorage
+}
+
+export default exportedStorages;
