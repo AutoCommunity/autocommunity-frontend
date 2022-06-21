@@ -34,12 +34,10 @@ const AddEventForm: React.FC<AddEventFormProps> = (props: AddEventFormProps) => 
         withCredentials: true,
       })
       .then((response) => {
-          console.log(response.data);
           props.setAddingEvent(false);
           props.selectMarker(props.marker);
       })
       .catch((error) => {
-        console.log(error.response.data)
         message.warning('Please login to be able to create events');
       });
       form.resetFields();

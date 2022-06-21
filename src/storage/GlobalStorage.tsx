@@ -58,7 +58,6 @@ class GlobalStorage {
 
     @action
     setTheme = (t: Theme) => {
-        console.log('set theme', t)
         localStorage.setItem("theme", t)
         this.getStylesheetLink().href = this.stylesheets[t]
         this.changeTheme(t);

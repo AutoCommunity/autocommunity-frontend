@@ -27,7 +27,6 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
         message.success('Logged in successfully');
       })
       .catch((error) => {
-        console.log(error.response.data)
         if (error.response.status === 400) {
           message.error('Incorrect username or password');
         }
@@ -47,7 +46,6 @@ const Auth: React.FC<AuthProps> = (props: AuthProps) => {
         message.success('Logged out successfully');
       })
       .catch((error) => {
-        console.log(error.response.data)
         if (error.response.status === 400) {
           window.location.reload()
         }

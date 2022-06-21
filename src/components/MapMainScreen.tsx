@@ -82,7 +82,6 @@ class MapMainScreen extends React.Component {
     const eventsData = await axios
       .get(process.env.REACT_APP_API_URL + '/api/event/all')
       .then(response => response.data);
-    console.log(eventsData);
 
     const userData = await this.getUserConfig();
     this.setState({markers: markersData, events: eventsData, isLoading: false, username: userData.username});
@@ -118,7 +117,6 @@ class MapMainScreen extends React.Component {
   async sendMarker(event: any) {
     this.setState({isLoading: true});
 
-    console.log(event);
     const requestBody = {
       name: event.name,
       markerType: event.markerType,
@@ -130,10 +128,8 @@ class MapMainScreen extends React.Component {
         withCredentials: true
       })
       .then(response => {
-        console.log(response)
       })
       .catch((error) => {
-        console.log(error.response.data);
       });
     
     this.setState({isLoading: false, isSavingMarker: false});
@@ -141,11 +137,9 @@ class MapMainScreen extends React.Component {
   }
 
   async getAddressByCoordinates(newMarkerCoords: L.LatLng) {
-    console.log(JSON.stringify(newMarkerCoords, null, 2));
     const result = await axios
       .get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${newMarkerCoords.lat}&lon=${newMarkerCoords.lng}`)
       .then(response => {
-        console.log(response.data);
         return response.data.display_name;
       });
     return result;
@@ -164,7 +158,6 @@ class MapMainScreen extends React.Component {
     this.setState({
       center: [item.lat, item.lng]
     });
-    console.log(this.state.center);
   }
 
   render() {
