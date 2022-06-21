@@ -8,12 +8,12 @@ function EventList(props: {events: any[]}) {
       }}
       bordered={true}
       dataSource={props.events}
-      renderItem = {(item : {name: string, description: string, startDate: any, endDate: any}) => (
+      renderItem = {(item : {name: string, description: string, startDate: any, endDate: any, id: any}) => (
         <List.Item
           style = {{
             margin: "5px"
           }}
-          key = {item.name}
+          key = {item.id}
         >
             <List.Item.Meta
                 title={<div>{item.name}</div>}

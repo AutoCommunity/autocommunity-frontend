@@ -57,8 +57,7 @@ function LocationMarkers(props: {markers: any[], saveMarkers: any, selectMarker:
   const [_, forceUpdate] = useReducer(x => x + 1, 0);
   const map = useMapEvents({
     locationfound: (e) => {
-      if (props.markers.length > 0) map.flyTo(props.markers[0], map.getZoom());
-      else map.flyTo(e.latlng, map.getZoom());
+      map.flyTo(e.latlng, map.getZoom());
     },
     click: (e) => {
       props.saveMarkers(e.latlng);

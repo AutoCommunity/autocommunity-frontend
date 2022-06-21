@@ -4,11 +4,12 @@ import axios from "axios";
 import Auth from './Auth';
 
 import 'leaflet/dist/leaflet.css'
-import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select, Space, Spin } from "antd";
+import { Layout, Menu, Modal, Form, message, Input, Button, Tooltip, Select, Space, Switch, Spin } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import '../index.css'
 import Sider from "antd/lib/layout/Sider";
 import MarkerList from "./MarkerList";
+import EventsList from "./EventsList";
 import MarkerInfoModal from "./MarkerInfoModal";
 import { Modal as MobileModal, Button as MobileButton, Form as MobileForm, Picker as MobileSelect } from "antd-mobile";
 import { isMobile } from 'react-device-detect';
@@ -36,6 +37,7 @@ class MapMainScreen extends React.Component {
   state = {
     isLoading: false,
     markers: [],
+    events: [],
     isSavingMarker: false,
     markerAddress: '',
     markerCoords: {lat: 0, lng: 0},
@@ -44,7 +46,8 @@ class MapMainScreen extends React.Component {
     selectedMarker: {},
     mobileSelectVisible: false,
     mobileSelectLabel: 'Other 👻',
-    bounds: null
+    bounds: null,
+    switchChecked: true
   }
 
   handleClose = async() => this.setState({ isSavingMarker: false });
@@ -72,11 +75,17 @@ class MapMainScreen extends React.Component {
 
   async componentDidMount() {
     this.setState({isLoading: true});
-    const data = await axios
+    const markersData = await axios
       .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
-    const userData = await this.getUserConfig();  
-    this.setState({markers: data, isLoading: false, username: userData.username});
+
+    const eventsData = await axios
+      .get(process.env.REACT_APP_API_URL + '/api/event/all')
+      .then(response => response.data);
+    console.log(eventsData);
+
+    const userData = await this.getUserConfig();
+    this.setState({markers: markersData, events: eventsData, isLoading: false, username: userData.username});
   }
 
   async getUserConfig() {
@@ -200,17 +209,31 @@ class MapMainScreen extends React.Component {
                         key: 'menu-item-auth',
                         label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
                       },
+                      {
+                        key: 'menu-item-switch',
+                        label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
+                      }
                     ]
                   }
                 >
                 </Menu>
-
-                <MarkerList
-                  markers={this.state.markers}
-                  handleCenterClick={this.handleCenterClick}
-                  selectMarker={this.selectMarker}
-                  bounds={this.state.bounds}
-                />
+                <Spin spinning={this.state.isLoading}>
+                  { 
+                  this.state.switchChecked ? 
+                    <MarkerList
+                      markers={this.state.markers} 
+                      handleCenterClick = {this.handleCenterClick}
+                      selectMarker = {this.selectMarker}
+                      bounds = {this.state.bounds}
+                    />
+                  : 
+                    <EventsList
+                      markers = {this.state.markers}
+                      events = {this.state.events}
+                      bounds = {this.state.bounds}
+                    />
+                  }
+                </Spin>
               </Content>
               <Footer
                 style={{
@@ -369,18 +392,32 @@ class MapMainScreen extends React.Component {
                       {
                         key: 'menu-item-auth',
                         label: <Auth username={this.state.username} saveUsername = {this.saveUsername} getUserConfig = {this.getUserConfig}/>
+                      },
+                      {
+                        key: 'menu-item-switch',
+                        label: <Switch defaultChecked = {this.state.switchChecked} onClick = {(value) => this.setState({ switchChecked: value})}/>
                       }
                     ]
                   }
                 >
                 </Menu>
-
-                <MarkerList
-                  markers={this.state.markers} 
-                  handleCenterClick = {this.handleCenterClick}
-                  selectMarker = {this.selectMarker}
-                  bounds={this.state.bounds}
-                />
+                <Spin spinning={this.state.isLoading}>
+                  { 
+                  this.state.switchChecked ? 
+                    <MarkerList
+                      markers={this.state.markers} 
+                      handleCenterClick = {this.handleCenterClick}
+                      selectMarker = {this.selectMarker}
+                      bounds = {this.state.bounds}
+                    />
+                  : 
+                    <EventsList
+                      markers = {this.state.markers}
+                      events = {this.state.events}
+                      bounds = {this.state.bounds}
+                    />
+                  }
+                </Spin>
 
               </Content>
               <Footer
