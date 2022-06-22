@@ -5,7 +5,8 @@ import { Form, Input, Button, message, DatePicker } from 'antd';
 interface AddEventFormProps {
     marker: any,
     selectMarker: any,
-    setAddingEvent: any
+    setAddingEvent: any,
+    updateEvents: any,
 }
 
 const { RangePicker } = DatePicker;
@@ -36,6 +37,7 @@ const AddEventForm: React.FC<AddEventFormProps> = (props: AddEventFormProps) => 
       .then((response) => {
           props.setAddingEvent(false);
           props.selectMarker(props.marker);
+          props.updateEvents();
       })
       .catch((error) => {
         message.warning('Please login to be able to create events');

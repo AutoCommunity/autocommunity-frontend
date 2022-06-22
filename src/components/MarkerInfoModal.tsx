@@ -14,7 +14,8 @@ interface MarkerInfoModalProps {
     marker: any,
     selectMarker: any,
     rateMarker: any,
-    updateMarkers: any
+    updateMarkers: any,
+    updateEvents: any,
 }
 
 interface MarkerInfoType {
@@ -104,7 +105,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                         onCancel = {() => setAddingEvent(false)}
                         width={600}
                 >
-                    <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                    <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent} updateEvents={props.updateEvents}/>
                 </Modal>
                 {
                     markerInfo.owner === props.globalStorage!.username ?
@@ -154,7 +155,7 @@ const MarkerInfoModal: React.FC<MarkerInfoModalProps> = inject(
                             onClose = {() => setAddingEvent(false)}
                             showCloseButton={true}
                             content={
-                                <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent}/>
+                                <AddEventForm marker={props.marker} selectMarker={props.selectMarker} setAddingEvent={setAddingEvent} updateEvents={props.updateEvents}/>
                             }
                         >
                         </MobileModal>

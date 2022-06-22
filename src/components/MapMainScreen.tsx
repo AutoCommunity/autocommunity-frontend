@@ -32,6 +32,7 @@ class MapMainScreen extends React.Component {
     this.rateMarker = this.rateMarker.bind(this);
     this.setBounds = this.setBounds.bind(this);
     this.updateMarkers = this.updateMarkers.bind(this);
+    this.updateEvents = this.updateEvents.bind(this);
     this.getUserConfig = this.getUserConfig.bind(this, this.globalStorage);
   }
 
@@ -108,11 +109,18 @@ class MapMainScreen extends React.Component {
     this.setState({ username: newUsername });
   }
 
-   async updateMarkers() {
+  async updateMarkers() {
     const data = await axios
       .get(process.env.REACT_APP_API_URL + '/api/markers/get/all')
       .then(response => response.data);
     this.setState({markers: data});
+  }
+
+  async updateEvents() {
+    const data = await axios
+      .get(process.env.REACT_APP_API_URL + '/api/event/all')
+      .then(response => response.data);
+    this.setState({events: data});
   }
 
   async sendMarker(event: any) {
@@ -345,6 +353,7 @@ class MapMainScreen extends React.Component {
             selectMarker={this.selectMarker}
             rateMarker={this.rateMarker}
             updateMarkers={this.updateMarkers}
+            updateEvents={this.updateEvents}
           />
         </Layout>
       )
@@ -552,6 +561,7 @@ class MapMainScreen extends React.Component {
             selectMarker={this.selectMarker}
             rateMarker={this.rateMarker}
             updateMarkers={this.updateMarkers}
+            updateEvents={this.updateEvents}
           />
         </Layout>
       )
